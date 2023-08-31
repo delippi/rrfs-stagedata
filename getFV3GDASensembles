@@ -1,0 +1,63 @@
+#!/bin/ksh --login
+#####################################################
+# machine set up (users should change this part)
+#####################################################
+
+#SBATCH --account=zrtrr
+#SBATCH --qos=batch
+#SBATCH --ntasks=1
+
+#SBATCH --partition=service   ## maxium 23:30 hours
+#SBATCH --time=23:00:00
+#SBATCH --job-name=get_gdasenkf
+#SBATCH -o log.gdasenkf
+
+
+set -ax
+
+module load hpss
+
+mkdir -p enkf/atm
+cd enkf/atm
+
+YYYY=2023
+MM=06
+for DD in $(seq -w 09 09) ; do
+for HH in 00 06 12 18; do 
+
+
+  cyc=${YYYY}${MM}${DD}
+  JDATE=`date -d  "${cyc:0:8} $HH" +%y%j%H00`
+  echo $YYYY $MM $DD $HH $JDATE
+
+
+HPSSDIR=/NCEPPROD/5year/hpssprod/runhistory/rh${YYYY}/${YYYY}${MM}/${YYYY}${MM}${DD}
+
+#make links
+for k in $(seq -w 1 80); do
+  #ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/mem0${k}/gdas.t${HH}z.atmf009.nemsio ${JDATE}.gdas.t${HH}z.atmf009s.mem0${k}.nemsio  # 2020
+  ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf009.nc ${JDATE}.gdas.t${HH}z.atmf009.mem0${k}.nc     # 2021--now
+done
+
+
+#extract fv3GDAS 80 members
+for i in $(seq 1 8); do
+
+  #tarfile=${HPSSDIR}/gpfs_dell1_nco_ops_com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar     # 2020 tar file name
+  #tarfile=${HPSSDIR}/com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # 2021 tar file name
+  #tarfile=${HPSSDIR}/com_gfs_v16.2_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # start from June 27 2022, tar file name 
+  tarfile=${HPSSDIR}/com_gfs_v16.3_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # start from Nov. 29 2022, tar file name 
+
+  k1=$(( $i * 10 -9  )); k2=$(( $i*10  ))
+  members=''
+
+  for k in $(seq -w $k1 $k2); do
+    #members="${members} ./enkfgdas.${YYYY}${MM}${DD}/${HH}/mem0${k}/gdas.t${HH}z.atmf009.nemsio"              # 2020
+    members="${members} ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf009.nc"             # 2021--now
+  done
+  htar -xvf $tarfile $members
+
+done
+
+done
+done
