@@ -11,6 +11,8 @@ Model: GFS forecast as ICs/LBCs, RAP/HRRR soil for soil surgery
 These scripts mainly provide the HPSS path for each data, please make a copy and update for your use.
 
 
+
+
 ***** Observation Scripts *****
 
 GVF: gvf.ksh, zip file contains j01 and npp data, npp is used in RRFS.
