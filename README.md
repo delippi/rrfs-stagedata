@@ -1,9 +1,8 @@
 # rrfs-stagedata
 This repository contains scripts to stage RRFS data for retrospective experiments.
-
 We will need to stage these data for RRFS retro run: 
 
-Observation: GVF, SST, snow,  conventional observation, vaisala lightning, radar reflectivity
+Observation: GVF, SST, snow,  conventional observation, vaisala lightning, MRMS radar reflectivity
 Data Assimilation: GDAS or RRFS ensemble for GSI hybrid, mesonet use list, amdar reject list
 Model: GFS forecast as ICs/LBCs, RAP/HRRR soil for soil surgery
 
@@ -27,9 +26,9 @@ Radar reflectivity: use refl.ksh to get MRMS reflectivity data and unzip files. 
 
 
 
-Data Assimilation scripts:
+***** Data Assimilation scripts *****
                  
- mesonet use list and amdar reject list are saved on Jet at
+mesonet use list and amdar reject list are saved on Jet at
 AIRCRAFT_REJECT="/home/role.amb-verif/acars_RR/amdar_reject_lists"
 SFCOBS_USELIST="/lfs4/BMC/amb-verif/rap_ops_mesonet_uselists"
 
@@ -39,7 +38,7 @@ GSI reads the previous day file for the current cycle, so if retro run start fro
 
 GDAS ensemble members: getFV3GDASensembles, GSI reads previous six hour GDAS members for current cycle, so if retro run starts on July 20 03Z, you need to stage July 19 18Z members also.
  
-RRFS ensemble
+RRFS ensemble:
 
 For the script to pull GEFS GRIB-2 data for initializing the RRFS ensemble, please use 
 /mnt/lfs1/BMC/wrfruc/chunhua/retro_data/retrieve_dsg_GEFS.sh
@@ -50,22 +49,17 @@ To pull GEFS data from AWS and fill the DSG GEFS data gaps, use
 To interpolate the 3-hourly GEFS data to hourly data, please refer to the scripts at  https://github.com/NOAA-GSL/GEFS_time_interpolation
 
 
+
 Model scripts:
 
 GFS forecast: gfs.ksh, 96 hour forecast should be enough for current RRFS.  
-
-If you need to interpolate 3-hourly GFS data to hourly data (e.g. 2020 gfs data), use /scratch1/BMC/wrfruc/chunhua/code/GEFS_time_interpolation/GFS_time_interp_standalone.sh
- 
-For example, get hourly data for 00Z July 27, 2020 from forecast hours 0 to 24, please do so:
-./GFS_time_interp_standalone.sh 2020727 0 24 00
-
-RAP/HRRR soil: 
-If you use GFS for ICs, you need to do soil surgery. Use get_raphrrrsoil.ksh to get rap/hrrr soil, for example, rap.t04z.wrf_inout_smoke and hrrr.t04z.wrf_inout are used to replace GFS soil.
+RAP/HRRR soil: If you use GFS for ICs, you need to do soil surgery. Use get_raphrrrsoil.ksh to get rap/hrrr soil, for example, rap.t04z.wrf_inout_smoke and hrrr.t04z.wrf_inout are used to replace GFS soil.
 
 If you use RAP for ICs, there is no need to do soil surgery.
 
 
-After stage data, usually I will check the file number for each data using retro_check.ksh. If all data looks good, then update the data path in ufs-srweather-app/regional_workflow/ush/set_rrfs_config.sh before generating the workflow.
+Check retro data:
+After stage data, usually I check the file number for each data using retro_check.ksh. If all data looks good, then update the data path in ufs-srweather-app/regional_workflow/ush/set_rrfs_config.sh if it's needed before generating the workflow.
 
 For example, update these variables to your location on Hera:
 
