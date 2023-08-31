@@ -16,7 +16,9 @@ These scripts mainly provide the HPSS path for each data, please make a copy and
 ***** Observation Scripts *****
 
 GVF: gvf.ksh, zip file contains j01 and npp data, npp is used in RRFS.
+
 SST: sst.ksh
+
 Snow: snow.ksh
 
 RRFS reads GVF, SST and snow from the previous day for the current cycle, so if retro run start from July 20, you need to save July 19 data also.
