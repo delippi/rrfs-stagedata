@@ -3,7 +3,9 @@ This repository contains scripts to stage RRFS data for retrospective experiment
 We will need to stage these data for RRFS retro run: 
 
 Observation: GVF, SST, snow,  conventional observation, vaisala lightning, MRMS radar reflectivity
+
 Data Assimilation: GDAS or RRFS ensemble for GSI hybrid, mesonet use list, amdar reject list
+
 Model: GFS forecast as ICs/LBCs, RAP/HRRR soil for soil surgery
 
 These scripts mainly provide the HPSS path for each data, please make a copy and update for your use.
