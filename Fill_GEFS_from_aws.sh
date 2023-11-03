@@ -1,4 +1,9 @@
-#!/bin/ksh --login 
+#!/bin/ksh
+#####################################################
+# machine set up (users should change this part)
+#####################################################
+
+# For Hera, Jet, Orio
 #SBATCH --time=23:30:00
 #SBATCH --qos=batch
 #SBATCH --partition=service
@@ -6,6 +11,14 @@
 #SBATCH --account=zrtrr
 #SBATCH --job-name=Fill_GEFS_from_aws
 #SBATCH --output=./Fill_GEFS_from_aws.log
+
+# For WCOSS2
+#PBS -A RRFS-DEV
+#PBS -q dev_transfer
+#PBS -l select=1:ncpus=1:mem=2G
+#PBS -l walltime=06:00:00
+#PBS -N Fill_GEFS_from_aws
+#PBS -j oe -o log.Fill_GEFS_from_aws
 
 # https://noaa-gefs-pds.s3.amazonaws.com/gefs.20220429/00/atmos/pgrb2ap5/gep01.t00z.pgrb2a.0p50.f114
 # https://noaa-gefs-pds.s3.amazonaws.com/gefs.20220429/00/atmos/pgrb2bp5/gep01.t00z.pgrb2b.0p50.f114
