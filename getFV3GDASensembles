@@ -41,7 +41,7 @@ for HH in 00 06 12 18; do
 HPSSDIR=/NCEPPROD/5year/hpssprod/runhistory/rh${YYYY}/${YYYY}${MM}/${YYYY}${MM}${DD}
 
 #make links
-for k in $(seq -w 1 30); do
+for k in $(seq -w 1 80); do
   #ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/mem0${k}/gdas.t${HH}z.atmf009.nemsio ${JDATE}.gdas.t${HH}z.atmf009s.mem0${k}.nemsio  # 2020
   ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf009.nc ${JDATE}.gdas.t${HH}z.atmf009.mem0${k}.nc     # 2021--now
 done
