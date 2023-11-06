@@ -1,8 +1,9 @@
-#!/bin/ksh --login
+#!/bin/ksh
 #####################################################
 # machine set up (users should change this part)
 #####################################################
 
+# For Hera, Jet, Orion
 #SBATCH --account=zrtrr
 #SBATCH --qos=batch
 #SBATCH --ntasks=1
@@ -11,6 +12,13 @@
 #SBATCH --job-name=get_rapObs
 #SBATCH -o log.rapObs
 
+# For WCOSS2
+#PBS -A RRFS-DEV
+#PBS -q dev_transfer
+#PBS -l select=1:ncpus=1:mem=2G
+#PBS -l walltime=06:00:00
+#PBS -N get_rapObs
+#PBS -j oe -o log.rapObs
 
 #-----------------#
 # rap observation #

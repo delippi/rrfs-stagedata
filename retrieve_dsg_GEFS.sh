@@ -1,4 +1,9 @@
-#!/bin/ksh --login 
+#!/bin/ksh
+#####################################################
+# machine set up (users should change this part)
+#####################################################
+
+# For Hera, Jet, Orion
 #SBATCH --time=23:30:00
 #SBATCH --qos=batch
 #SBATCH --partition=service
@@ -6,6 +11,15 @@
 #SBATCH --account=zrtrr
 #SBATCH --job-name=retrieve_dsg_gefs
 #SBATCH --output=./retrieve_dsg_gefs.log
+
+# For WCOSS2
+#PBS -A RRFS-DEV
+#PBS -q dev_transfer
+#PBS -l select=1:ncpus=1:mem=2G
+#PBS -l walltime=06:00:00
+#PBS -N retrieve_dsg_gefs
+#PBS -j oe -o log.retrieve_dsg_gefs
+
 set -x
 
 module load hpss
