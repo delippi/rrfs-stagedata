@@ -29,11 +29,19 @@ module load hpss
 sourcedir1=/BMC/fdr/Permanent/
 sourcedir2=/grib/gens_pgrb2b
 sourcedir3=/7/2/107/0_259920_0/
-#stagedir=/mnt/lfs4/HFIP/gsihyb/Chunhua.Zhou/data/GEFS/public/pgrb2.merged
-stagedir=/scratch1/BMC/wrfruc/chunhua/data/GEFS
+# Jet:
+stagedir=/lfs4/BMC/wrfruc/RRFS_RETRO_DATA/GEFS
+# Hera:
+#stagedir=/scratch2/BMC/zrtrr/RRFS_RETRO_DATA/GEFS
 
-#yyyymmddhh=` date '+%Y%m%d%H' -d "-4 hours"  `
-for yyyymmdd in  20220208 20220209 20220210 20220211 20220212 20220213 ; do
+missing_list=${stagedir}/../script/missing_hpss_gefs.list 
+ 
+if [ -s ${missing_list} ] ; then
+   rm -f ${missing_list}
+fi
+
+for yyyymmdd in  202308{25..31}
+do
 
   yyyy="${yyyymmdd:0:4}"
   yy="${yyyymmdd:2:2}"
@@ -48,12 +56,14 @@ for yyyymmdd in  20220208 20220209 20220210 20220211 20220212 20220213 ; do
       if [ ! -s $stagedir/gep${mem}/${yy}${doy}${hh}000000 ] ; then
         echo hsi get  "$sourcedir1/$yyyy/$mm/$dd/$sourcedir2/gep${mem}/$sourcedir3/${yyyymmdd}${hh}00.zip"
         hsi get  $sourcedir1/$yyyy/$mm/$dd/$sourcedir2/gep${mem}/$sourcedir3/${yyyymmdd}${hh}00.zip
-        if [ $? -ne 0 ]; then
-          exit 999
+        if [ $? -eq 0 ]; then
+          echo y | unzip -o ${yyyymmdd}${hh}00.zip
+          rm -f ${yyyymmdd}${hh}00.zip
+          rm -f ${yy}${doy}${hh}0003??  ${yy}${doy}${hh}0002??  ${yy}${doy}${hh}0001??  ${yy}${doy}${hh}00009? ${yy}${doy}${hh}00008?
+        else
+          echo "Can't find $sourcedir1/$yyyy/$mm/$dd/$sourcedir2/gep${mem}/$sourcedir3/${yyyymmdd}${hh}00.zip !!!! "
+          echo "gep${mem}.${yyyymmdd}${hh}" >>  ${missing_list}
         fi
-        echo y | unzip -o ${yyyymmdd}${hh}00.zip
-        rm -f ${yyyymmdd}${hh}00.zip
-        rm -f ${yy}${doy}${hh}0003??  ${yy}${doy}${hh}0002??  ${yy}${doy}${hh}0001?? 
       fi
     done
   done

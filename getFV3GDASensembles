@@ -23,46 +23,69 @@
 set -ax
 
 module load hpss
+# Jet:
+cd /lfs4/BMC/wrfruc/RRFS_RETRO_DATA/enkf/atm
+# Hera:
+#cd /scratch2/BMC/zrtrr/RRFS_RETRO_DATA/enkf/atm
 
-mkdir -p enkf/atm
-cd enkf/atm
+# decide the purpose of pulling the data: 
+for_ensICs=TRUE  # TRUE: pull 6 hour atm and sfc files for ensemble initialization; otherwise, pull 9 hour atm files for GSI hybrid analysis
 
-YYYY=2023
-MM=06
-for DD in $(seq -w 09 09) ; do
-for HH in 00 06 12 18; do 
+if [[ ${for_ensICs} == "TRUE" ]]; then
+  ensize=30
+  groupsize=3
+  fhr=6
+else
+  ensize=80
+  groupsize=8
+  fhr=9
+fi
 
+YYYY=2022
+MM=02
+
+for DD  in $(seq -w 01 07 ); do
+for HH in 00 06 12 18; do
 
   cyc=${YYYY}${MM}${DD}
   JDATE=`date -d  "${cyc:0:8} $HH" +%y%j%H00`
   echo $YYYY $MM $DD $HH $JDATE
 
-
 HPSSDIR=/NCEPPROD/5year/hpssprod/runhistory/rh${YYYY}/${YYYY}${MM}/${YYYY}${MM}${DD}
 
 #make links
-for k in $(seq -w 1 80); do
+for k in $(seq -w 1 ${ensize} ); do
   #ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/mem0${k}/gdas.t${HH}z.atmf009.nemsio ${JDATE}.gdas.t${HH}z.atmf009s.mem0${k}.nemsio  # 2020
-  ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf009.nc ${JDATE}.gdas.t${HH}z.atmf009.mem0${k}.nc     # 2021--now
+  ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf00${fhr}.nc ${JDATE}.gdas.t${HH}z.atmf00${fhr}.mem0${k}.nc     # 2021--now
+  if [[ ${for_ensICs} == "TRUE" ]]; then
+    ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.sfcf00${fhr}.nc ${JDATE}.gdas.t${HH}z.sfcf00${fhr}.mem0${k}.nc     # 2021--now
+  fi
 done
 
-
-#extract fv3GDAS 80 members
-for i in $(seq 1 8); do
+for i in $(seq 1 ${groupsize} ); do
 
   #tarfile=${HPSSDIR}/gpfs_dell1_nco_ops_com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar     # 2020 tar file name
-  #tarfile=${HPSSDIR}/com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # 2021 tar file name
-  #tarfile=${HPSSDIR}/com_gfs_v16.2_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # start from June 27 2022, tar file name 
-  tarfile=${HPSSDIR}/com_gfs_v16.3_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # start from Nov. 29 2022, tar file name 
+  tarfile=${HPSSDIR}/com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # 2021 tar file name
+  #tarfile=${HPSSDIR}/com_gfs_v16.2_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # start from June 27 2022, tar file name
+#  tarfile=${HPSSDIR}/com_gfs_v16.3_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # start from Nov. 29 2022, tar file name
 
   k1=$(( $i * 10 -9  )); k2=$(( $i*10  ))
   members=''
 
-  for k in $(seq -w $k1 $k2); do
-    #members="${members} ./enkfgdas.${YYYY}${MM}${DD}/${HH}/mem0${k}/gdas.t${HH}z.atmf009.nemsio"              # 2020
-    members="${members} ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf009.nc"             # 2021--now
-  done
-  htar -xvf $tarfile $members
+    for k in $(seq -w $k1 $k2); do
+      localfile=./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf00${fhr}.nc
+      localfile_sfc=""
+      if [[ ${for_ensICs} == "TRUE" ]]; then
+        localfile_sfc=./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.sfcf00${fhr}.nc
+      fi
+      if [[ ! -s $localfile ]] || [[ -n  "$( find $localfile  -size -1690M )" ]];  then
+        members="${members} $localfile ${localfile_sfc}"
+      fi
+    done
+    echo "members = $members "
+    if [[ -n "${members// /}" ]]; then
+       htar -xvf $tarfile $members
+    fi
 
 done
 
