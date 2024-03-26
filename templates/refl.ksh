@@ -9,20 +9,20 @@
 #SBATCH --ntasks=1
 #SBATCH --partition=service
 #SBATCH --time=08:00:00
-#SBATCH --job-name=get_gvfObs
-#SBATCH -o log.gvfObs
+#SBATCH --job-name=get_reflObs
+#SBATCH -o log.reflObs
 
 # For WCOSS2
 #PBS -A RRFS-DEV
 #PBS -q dev_transfer
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
-#PBS -N get_gvfObs
-#PBS -j oe -o log.gvfObs
+#PBS -N get_reflObs
+#PBS -j oe -o log.reflObs.@YYYY@@MM@@DD@
 
-#------#
-# gvf
-#------#
+#--------------#
+# reflectivity
+#--------------#
 
 # Record start time
 start_time=$(date +%s)
@@ -36,16 +36,30 @@ elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
   cd $PBS_O_WORKDIR
 fi
 
-mkdir -p gvf/grib2
-cd gvf/grib2
+cd ..
+mkdir -p tmp
+cd tmp
 
-yy=2023
-mm=06
+yy=@YYYY@
+mm=@MM@
 
-for day in $(seq -w 10 18); do
-  hsi get /BMC/fdr/Permanent/${yy}/${mm}/${day}/data/sat/ncep/viirs/gvf/grib2/${yy}${mm}${day}0000.zip
-  unzip ${yy}${mm}${day}0000.zip
-  rm ${yy}${mm}${day}0000.zip
+for dd in $(seq -w @DD@ @DD@); do
+
+ # 2020-Jun. 2022
+ #htar -xvf /NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}/dcom_prod_ldmdata_obs.tar ./upperair/mrms/conus/MergedReflectivityQC/MergedReflectivityQC_*_${yy}${mm}${dd}-*.grib2.gz
+
+ # start from Jul. 2022, tar file name changed
+ htar -xvf /NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}/dcom_ldmdata_obs.tar ./upperair/mrms/conus/MergedReflectivityQC/MergedReflectivityQC_*_${yy}${mm}${dd}-*.grib2.gz
+
+ cd upperair/mrms/conus/MergedReflectivityQC
+ for file in `ls MergedReflectivityQC_*_${yy}${mm}${dd}-*.grib2.gz  `
+ do
+   gzip -d ${file}
+ done
+
+ # return to tmp directory
+ cd ../../../../
+
 done
 
 # Record the end time
@@ -56,4 +70,3 @@ elapsed_time=$((end_time - start_time))
 
 # Print the elapsed time
 echo "Script runtime: $elapsed_time seconds"
-

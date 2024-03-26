@@ -20,6 +20,21 @@
 #PBS -N get_raphrrrsoil
 #PBS -j oe -o log.rapsoil
 
+#------#
+# rap_soil
+#------#
+
+# Record start time
+start_time=$(date +%s)
+
+# Set the path to where to stage the data.
+if [[ -n $1 ]]; then  # use user defined path
+  cd $1
+elif [[ -n $SLURM_SUBMIT_DIR ]]; then  # use slurm submit dir
+  cd $SLURM_SUBMIT_DIR
+elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
+  cd $PBS_O_WORKDIR
+fi
 
 # EXPORT list here
  module purge
@@ -35,7 +50,8 @@ cd rap_hrrr_soil
 yy=2023
 yymm=202306
 
-for i in 10 
+#for i in 11 12 13 14 15 16 17 18
+for i in 17 18
 do
   mkdir -p ${yymm}${i}
   cd ${yymm}${i}
@@ -65,9 +81,11 @@ do
 done
 
 
-exit
+# Record the end time
+end_time=$(date +%s)
 
+# Calculate the elapsed time
+elapsed_time=$((end_time - start_time))
 
-
-
-
+# Print the elapsed time
+echo "Script runtime: $elapsed_time seconds"
