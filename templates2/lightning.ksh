@@ -24,13 +24,15 @@
 # lightning observation #
 #-----------------------# 
 
+dataloc=@DATALOC@
+cd $dataloc
 mkdir -p lightning/vaisala/netcdf
 cd lightning/vaisala/netcdf
 
-yy=2023
-mm=06
+yy=@YYYY@
+mm=@MM@
 
-for day in  $(seq -w 10 10); do 
+for day in  $(seq -w @SDAY@ @EDAY@); do 
   for cyc in 00
   do
     hsi get /BMC/fdr/Permanent/${yy}/${mm}/${day}/data/lightning/vaisala/netcdf/${yy}${mm}${day}${cyc}00.zip

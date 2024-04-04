@@ -43,15 +43,16 @@ module load hpss
 module list
 set -x
 
+dataloc=@DATALOC@
+cd $dataloc
 mkdir -p rap_hrrr_soil
 cd rap_hrrr_soil
 
-
-yy=2023
-yymm=202306
+yy=@YYYY@
+yymm=@YYYY@@MM@
 
 #for i in 11 12 13 14 15 16 17 18
-for i in 17 18
+for i in @DLIST@
 do
   mkdir -p ${yymm}${i}
   cd ${yymm}${i}

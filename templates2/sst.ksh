@@ -9,19 +9,19 @@
 #SBATCH --ntasks=1
 #SBATCH --partition=service
 #SBATCH --time=08:00:00
-#SBATCH --job-name=get_gvfObs
-#SBATCH -o log.gvfObs
+#SBATCH --job-name=get_sstObs
+#SBATCH -o log.sstObs
 
 # For WCOSS2
 #PBS -A RRFS-DEV
 #PBS -q dev_transfer
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
-#PBS -N get_gvfObs
-#PBS -j oe -o log.gvfObs
+#PBS -N get_sstObs
+#PBS -j oe -o log.sstObs
 
 #------#
-# gvf
+# sst
 #------#
 
 # Record start time
@@ -36,14 +36,16 @@ elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
   cd $PBS_O_WORKDIR
 fi
 
-mkdir -p gvf/grib2
-cd gvf/grib2
+dataloc=@DATALOC@
+cd $dataloc
+mkdir -p highres_sst
+cd highres_sst
 
-yy=2023
-mm=06
+yy=@YYYY@
+mm=@MM@
 
-for day in $(seq -w 10 18); do
-  hsi get /BMC/fdr/Permanent/${yy}/${mm}/${day}/data/sat/ncep/viirs/gvf/grib2/${yy}${mm}${day}0000.zip
+for day in $(seq -w @SDAY@ @EDAY@); do
+  hsi get /BMC/fdr/Permanent/${yy}/${mm}/${day}/grib/ftp/7/4/44/0_9331200_0/${yy}${mm}${day}0000.zip
   unzip ${yy}${mm}${day}0000.zip
   rm ${yy}${mm}${day}0000.zip
 done
@@ -56,4 +58,3 @@ elapsed_time=$((end_time - start_time))
 
 # Print the elapsed time
 echo "Script runtime: $elapsed_time seconds"
-

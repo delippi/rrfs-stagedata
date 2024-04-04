@@ -36,14 +36,16 @@ elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
   cd $PBS_O_WORKDIR
 fi
 
+dataloc=@DATALOC@
+cd $dataloc
 mkdir -p obs_rap
 
 cd obs_rap
 
-yy=2023
-mm=06
+yy=@YYYY@
+mm=@MM@
 
-for day in $(seq -w 17 18); do
+for day in $(seq -w @SDAY@ @EDAY@); do
   for cyc in 00 06 12 18
   do
     hsi get /BMC/fdr/Permanent/${yy}/${mm}/${day}/data/grids/rap/obs/${yy}${mm}${day}${cyc}00.zip

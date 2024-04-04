@@ -36,7 +36,7 @@ elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
   cd $PBS_O_WORKDIR
 fi
 
-cd ..
+cd ../../rrfs-stagedata-data/
 mkdir -p tmp
 cd tmp
 

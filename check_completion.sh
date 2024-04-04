@@ -1,25 +1,31 @@
-#!/bin/ksh
+#!/bin/bash
 
-spdy=20230610; epdy=20230618  # spring 2023 retro period
+dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-data"
 
-check_enkf="YES"              # check enkf/atm; getFV3GDASensembles
+#spdy=20230610; epdy=20230618  # spring 2023 retro period
+spdy=20230701; epdy=20230707  # summer 2023 retro period
+
 check_gvf="YES"               # check gvf; gvf.ksh
 check_highres_sst="YES"       # check highres_sst; sst.ksh
 check_obs_rap="YES"           # check obs_rap; obsrap.ksh
 check_rap_hrrr_soil="YES"     # check rap_hrrr_soil; get_raphrrrsoil.ksh
-check_MRMS_reflectivity="YES" # check MRMS reflectivity; refl.ksh
 check_IMS_snow="YES"          # check IMS snow; snow.ksh
+check_enkf="YES"              # check enkf/atm; getFV3GDASensembles
+check_MRMS_reflectivity="YES" # check MRMS reflectivity; refl.ksh
+check_gfs="YES"              # check gvf; gvf.ksh
 check_GEFS="YES"              # check GEFS; retrieve_dsg_GEFS.sh
 
-#check_enkf="NO"              # check enkf/atm; getFV3GDASensembles
 #check_gvf="NO"               # check gvf; gvf.ksh
 #check_highres_sst="NO"       # check highres_sst; sst.ksh
 #check_obs_rap="NO"           # check obs_rap; obsrap.ksh
 #check_rap_hrrr_soil="NO"     # check rap_hrrr_soil; get_raphrrrsoil.ksh
-#check_MRMS_reflectivity="NO" # check MRMS reflectivity; refl.ksh
 #check_IMS_snow="NO"          # check IMS snow; snow.ksh
+#check_enkf="NO"              # check enkf/atm; getFV3GDASensembles
+#check_MRMS_reflectivity="NO" # check MRMS reflectivity; refl.ksh
+#check_gfs="NO"               # check gvf; gvf.ksh
 #check_GEFS="NO"              # check GEFS; retrieve_dsg_GEFS.sh
 
+cd $dataloc
 pdy=$spdy
 while [[ $pdy -le $epdy ]]; do
   echo `doy $pdy`
@@ -86,19 +92,31 @@ while [[ $pdy -le $epdy ]]; do
     echo "snow/          $pdy is completed: ${percent}% ($num)"
   fi
 
+  # check gfs
+  if [[ $check_gfs == "YES" ]]; then
+    num=`find gfs/0p25deg/grib2/ -name "${yy}${doy}*" | wc`
+    num=`echo $num | cut -f 1 -d " "`
+    (( percent = 100 * $num / 320 ))  # 320 files for each day
+    echo "gfs/           $pdy is completed: ${percent}% ($num)"
+  fi
+
   # check GEFS
   if [[ $check_GEFS == "YES" ]]; then
     for mem in $(seq -w 1 30);  do
       num=`find GEFS/dsg/gep$mem/. -name "${yy}${doy}*" | wc`
       num=`echo $num | cut -f 1 -d " "`
       (( percent = 100 * $num / 136 ))  # 1 files for each day
-      if [[ $num -ne 136 ]]; then
-      echo "GEFS/mem$mem/    $pdy is completed: ${percent}% ($num)"
-      fi
+      #if [[ $num -ne 136 ]]; then
+      echo "GEFS/dsg/gep$mem/    $pdy is completed: ${percent}% ($num)"
+      #fi
     done
   fi
 
 
   (( pdy = pdy + 1 ))
   echo ""
+  read -p "Continue to next day? (n)ext" ans
+  if [[ $ans != "n" ]]; then # n=next
+     exit
+  fi
 done
