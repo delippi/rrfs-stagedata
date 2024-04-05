@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-data"
+dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 
 #spdy=20230610; epdy=20230618  # spring 2023 retro period
 spdy=20230701; epdy=20230707  # summer 2023 retro period

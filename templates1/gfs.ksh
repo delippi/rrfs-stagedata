@@ -37,7 +37,9 @@ elif [[ -n $SLURM_SUBMIT_DIR ]]; then  # use slurm submit dir
 elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
   cd $PBS_O_WORKDIR
 fi
-cd ../../rrfs-stagedata-data/
+#cd ../../rrfs-stagedata/
+dataloc=@DATALOC@
+cd $dataloc
 mkdir -p gfs/0p25deg/grib2
 cd gfs/0p25deg/grib2
 

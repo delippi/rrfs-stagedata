@@ -35,7 +35,9 @@ elif [[ -n $SLURM_SUBMIT_DIR ]]; then  # use slurm submit dir
 elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
   cd $PBS_O_WORKDIR
 fi
-cd ../../rrfs-stagedata-data/
+#cd ../../rrfs-stagedata/
+dataloc=@DATALOC@
+cd $dataloc
 mkdir -p GEFS/dsg
 cd GEFS/dsg
 
@@ -66,12 +68,14 @@ for yyyymmdd in  @YYYY@@MM@@DD@ ; do
       if [ ! -s $stagedir/gep${mem}/${yy}${doy}${hh}000000 ] ; then
         echo hsi get  "$sourcedir1/$yyyy/$mm/$dd/$sourcedir2/gep${mem}/$sourcedir3/${yyyymmdd}${hh}00.zip"
         hsi get  $sourcedir1/$yyyy/$mm/$dd/$sourcedir2/gep${mem}/$sourcedir3/${yyyymmdd}${hh}00.zip
-        if [ $? -ne 0 ]; then
-          exit 999
+        #if [ $? -ne 0 ]; then
+        #  exit 999
+        #fi
+        if [ $? -eq 0 ]; then
+          echo y | unzip -o ${yyyymmdd}${hh}00.zip
+          rm -f ${yyyymmdd}${hh}00.zip
+          rm -f ${yy}${doy}${hh}0003??  ${yy}${doy}${hh}0002??  ${yy}${doy}${hh}0001?? 
         fi
-        echo y | unzip -o ${yyyymmdd}${hh}00.zip
-        rm -f ${yyyymmdd}${hh}00.zip
-        rm -f ${yy}${doy}${hh}0003??  ${yy}${doy}${hh}0002??  ${yy}${doy}${hh}0001?? 
       fi
     done
   done

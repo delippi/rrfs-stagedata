@@ -7,7 +7,7 @@ mkdir -p ./scripts2
 
 sdate=2023070100
 edate=2023070700
-dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-data"
+dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 
 # create date list string like "01 02 03 04 05 06 07"
 DLIST=""

@@ -36,9 +36,11 @@ elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
   cd $PBS_O_WORKDIR
 fi
 
-cd ../../rrfs-stagedata-data/
-mkdir -p tmp
-cd tmp
+#cd ../../rrfs-stagedata/
+dataloc=@DATALOC@
+cd $dataloc
+mkdir -p reflectivity
+cd reflectivity
 
 yy=@YYYY@
 mm=@MM@

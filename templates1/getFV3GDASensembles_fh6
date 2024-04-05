@@ -35,7 +35,9 @@ elif [[ -n $SLURM_SUBMIT_DIR ]]; then  # use slurm submit dir
 elif [[ -n $PBS_O_WORKDIR ]]; then  # use pbs submit dir
   cd $PBS_O_WORKDIR
 fi
-cd ../../rrfs-stagedata-data/
+#cd ../../rrfs-stagedata/
+dataloc=@DATALOC@
+cd $dataloc
 mkdir -p enkf/atm
 cd enkf/atm
 
@@ -53,7 +55,7 @@ for HH in 00 06 12 18; do
   #make links
 #  for k in $(seq -w 1 80); do
   for k in $(seq -w 1 30); do
-    #ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf006.nc ${JDATE}.gdas.t${HH}z.atmf006.mem0${k}.nc     # 2021--now
+    ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf006.nc ${JDATE}.gdas.t${HH}z.atmf006.mem0${k}.nc     # 2021--now
     ln -sf ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.sfcf006.nc ${JDATE}.gdas.t${HH}z.sfcf006.mem0${k}.nc     # 2021--now
   done
 
@@ -73,7 +75,7 @@ for HH in 00 06 12 18; do
     k1=$(( $i * 10 -9  )); k2=$(( $i*10  ))
     members=''
     for k in $(seq -w $k1 $k2); do
-      #members="${members} ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf006.nc"             # 2021--now
+      members="${members} ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.atmf006.nc"             # 2021--now
       members="${members} ./enkfgdas.${YYYY}${MM}${DD}/${HH}/atmos/mem0${k}/gdas.t${HH}z.sfcf006.nc"             # 2021--now
   done
   htar -xvf $tarfile $members
