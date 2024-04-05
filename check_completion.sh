@@ -1,6 +1,7 @@
 #!/bin/bash
 
 dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
 
 #spdy=20230610; epdy=20230618  # spring 2023 retro period
 spdy=20230701; epdy=20230707  # summer 2023 retro period
@@ -14,6 +15,8 @@ check_enkf="YES"              # check enkf/atm; getFV3GDASensembles
 check_MRMS_reflectivity="YES" # check MRMS reflectivity; refl.ksh
 check_gfs="YES"              # check gvf; gvf.ksh
 check_GEFS="YES"              # check GEFS; retrieve_dsg_GEFS.sh
+check_RAVE="YES"              # check RAVE;
+check_satFED="YES"            # check sat (fed-lightning);
 
 #check_gvf="NO"               # check gvf; gvf.ksh
 #check_highres_sst="NO"       # check highres_sst; sst.ksh
@@ -24,11 +27,21 @@ check_GEFS="YES"              # check GEFS; retrieve_dsg_GEFS.sh
 #check_MRMS_reflectivity="NO" # check MRMS reflectivity; refl.ksh
 #check_gfs="NO"               # check gvf; gvf.ksh
 #check_GEFS="NO"              # check GEFS; retrieve_dsg_GEFS.sh
+#check_RAVE="NO"              # check RAVE;
+#check_satFED="NO"            # check sat (fed-lightning);
 
+mkdir -p $stat
 cd $dataloc
 pdy=$spdy
 while [[ $pdy -le $epdy ]]; do
-  echo `doy $pdy`
+echo """`date`
+script:
+  `pwd`/$0
+data:
+  $dataloc
+""" > ${stat}/status.$pdy
+
+  echo `doy $pdy` | tee -a ${stat}/status.$pdy
   doy=`doy $pdy | cut -f 4 -d " "`
   yy=`echo $pdy | cut -c 3-4`
 
@@ -38,7 +51,7 @@ while [[ $pdy -le $epdy ]]; do
     num=`find enkf/atm/enkfgdas.${pdy} -name *nc | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 560 ))  # 80 ensemble members x 4 synoptic times = 320/day
-    echo "enkf/atm/      $pdy is completed: ${percent}% ($num)"
+    echo "enkf/atm/      $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
                                   #atm +30 ensemble members x 4 synoptic times = 440/day
                                   #sfc +30 ensemble members x 4 synoptic times = 560/day
   fi
@@ -48,7 +61,7 @@ while [[ $pdy -le $epdy ]]; do
     num=`find gvf/grib2/ -name "*e$pdy*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 2 ))  # 2 files for each day
-    echo "gvf/grib2/     $pdy is completed: ${percent}% ($num)"
+    echo "gvf/grib2/     $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
   # check highres_sst
@@ -56,7 +69,7 @@ while [[ $pdy -le $epdy ]]; do
     num=`find highres_sst/ -name "${yy}${doy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 1 )) # 1 file for each day
-    echo "highres_sst/   $pdy is completed: ${percent}% ($num)"
+    echo "highres_sst/   $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
   # check obs_rap
@@ -64,7 +77,7 @@ while [[ $pdy -le $epdy ]]; do
     num=`find obs_rap/ -name "${pdy}*rap*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 1050 )) # ~1050 files for each day (give or take a few)
-    echo "obs_rap/       $pdy is completed: ${percent}% ($num)"
+    echo "obs_rap/       $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
   # check rap_hrrr_soil
@@ -72,7 +85,7 @@ while [[ $pdy -le $epdy ]]; do
     num=`find rap_hrrr_soil/$pdy/ -name "*wrf*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 2 ))  # 2 files for each day
-    echo "rap_hrrr_soil/ $pdy is completed: ${percent}% ($num)"
+    echo "rap_hrrr_soil/ $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
   # check MRMS reflectivity
@@ -81,7 +94,7 @@ while [[ $pdy -le $epdy ]]; do
     num=`find reflectivity/upperair/mrms/conus/MergedReflectivityQC/ -name "*${pdy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 23760 ))  # 23760 files for each day
-    echo "reflectivity/  $pdy is completed: ${percent}% ($num)"
+    echo "reflectivity/  $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
   # check IMS snow
@@ -89,7 +102,23 @@ while [[ $pdy -le $epdy ]]; do
     num=`find snow/ims96/grib2/ -name "${yy}${doy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 1 ))  # 1 files for each day
-    echo "snow/          $pdy is completed: ${percent}% ($num)"
+    echo "snow/          $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
+  fi
+
+  # check RAVE dust
+  if [[ $check_RAVE == "YES" ]]; then
+    num=`find RAVE_RAW/ -name "RAVE*s${pdy}*" | wc`
+    num=`echo $num | cut -f 1 -d " "`
+    (( percent = 100 * $num / 1 ))  # 1 files for each day
+    echo "RAVE/          $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
+  fi
+
+  # check sat FED lightning 
+  if [[ $check_satFED == "YES" ]]; then
+    num=`find sat/nesdis/goes-east/glm/full-disk/ -name "fed*s${pdy}*" | wc`
+    num=`echo $num | cut -f 1 -d " "`
+    (( percent = 100 * $num / 1 ))  # 1 files for each day
+    echo "satFED/        $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
   # check gfs
@@ -97,7 +126,7 @@ while [[ $pdy -le $epdy ]]; do
     num=`find gfs/0p25deg/grib2/ -name "${yy}${doy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 320 ))  # 320 files for each day
-    echo "gfs/           $pdy is completed: ${percent}% ($num)"
+    echo "gfs/           $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
   # check GEFS
@@ -107,16 +136,16 @@ while [[ $pdy -le $epdy ]]; do
       num=`echo $num | cut -f 1 -d " "`
       (( percent = 100 * $num / 136 ))  # 1 files for each day
       #if [[ $num -ne 136 ]]; then
-      echo "GEFS/dsg/gep$mem/    $pdy is completed: ${percent}% ($num)"
+      echo "GEFS/dsg/gep$mem/    $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
       #fi
     done
   fi
 
 
   (( pdy = pdy + 1 ))
-  echo ""
-  read -p "Continue to next day? (n)ext" ans
-  if [[ $ans != "n" ]]; then # n=next
-     exit
-  fi
+  #echo ""
+  #read -p "Continue to next day? (n)ext" ans
+  #if [[ $ans != "n" ]]; then # n=next
+  #   exit
+  #fi
 done

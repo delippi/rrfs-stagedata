@@ -7,6 +7,7 @@ mkdir -p ./scripts2
 
 sdate=2023070100
 edate=2023070700
+
 dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 
 # create date list string like "01 02 03 04 05 06 07"
@@ -23,7 +24,8 @@ MM=`echo $sdate | cut -c 5-6`
 SDAY=`echo $sdate | cut -c 7-8`
 EDAY=`echo $edate | cut -c 7-8`
 
-tasks="get_raphrrrsoil.ksh gvf.ksh lightning.ksh obsrap.ksh snow.ksh sst.ksh"
+tasks="get_raphrrrsoil.ksh gvf.ksh lightning.ksh obsrap.ksh snow.ksh sst.ksh fed_fulldisk.ksh"
+tasks="fed_fulldisk.ksh"
 
 echo "cd scripts2"
 for task in $tasks; do
