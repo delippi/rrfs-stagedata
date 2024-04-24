@@ -19,14 +19,15 @@ mem_start=25; mem_end=27
 mem_start=28; mem_end=30
 
 echo "cd scripts1"
-for DD in $(seq -w 01 07) ; do
+#for DD in $(seq -w 01 07) ; do
+for DD in $(seq -w 06 06) ; do
 
   date=${YYYY}${MM}${DD}
 
   # Set filename0
   # Need to Run
   #filename0=retrieve_dsg_GEFS.sh  # can usually do about 4-5 members in 6h
-  #filename0=getFV3GDASensembles
+  filename0=getFV3GDASensembles
   #filename0=getFV3GDASensembles_fh6
   #filename0=refl.ksh
   #filename0=gfs.ksh

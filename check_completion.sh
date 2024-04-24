@@ -1,5 +1,33 @@
 #!/bin/bash
 
+# Function to display the script's usage/help information
+display_help() {
+  echo "Usage: ./${0}.sh [OPTIONS]"
+  echo "Options:"
+  echo "  -n    no pause between output"
+  echo "  -u    upload to rzdm"
+  echo "  -h    Display this help message"
+}
+
+pause="YES"
+upload="NO"
+while getopts ":nuh" opt; do
+  case $opt in
+    n)
+      echo "Option -n is set: no pause."
+      pause="NO"
+      ;;
+    u)
+      echo "Option -u is set: upload."
+      upload="YES"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG"
+      # Handle invalid options
+      ;;
+  esac
+done
+
 dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
 
@@ -44,6 +72,7 @@ data:
   echo `doy $pdy` | tee -a ${stat}/status.$pdy
   doy=`doy $pdy | cut -f 4 -d " "`
   yy=`echo $pdy | cut -c 3-4`
+  yyyy=`echo $pdy | cut -c 1-4`
 
   # check enkf/atm
   if [[ $check_enkf == "YES" ]]; then
@@ -115,9 +144,9 @@ data:
 
   # check sat FED lightning 
   if [[ $check_satFED == "YES" ]]; then
-    num=`find sat/nesdis/goes-east/glm/full-disk/ -name "fed*s${pdy}*" | wc`
+    num=`find sat/nesdis/goes-east/glm/full-disk/ -name "*GLM*s${yyyy}${doy}*nc" | wc`
     num=`echo $num | cut -f 1 -d " "`
-    (( percent = 100 * $num / 1 ))  # 1 files for each day
+    (( percent = 100 * $num / 240 ))  # 240 files for each day
     echo "satFED/        $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
@@ -143,9 +172,19 @@ data:
 
 
   (( pdy = pdy + 1 ))
-  #echo ""
-  #read -p "Continue to next day? (n)ext" ans
-  #if [[ $ans != "n" ]]; then # n=next
-  #   exit
-  #fi
+  echo ""
+  if [[ $pause == "YES" ]]; then
+    read -p "Continue to next day? (n)ext" ans
+    if [[ $ans != "n" ]]; then # n=next
+       exit
+    fi
+  fi
 done
+
+#read -p "upload to rzdm? (y/n)" ans
+if [[ $upload == 'YES' ]]; then
+   cd $stat
+   ssh-keygen -R emcrzdm.ncep.noaa.gov -f /u/donald.e.lippi/.ssh/known_hosts
+   rsync -a status* donald.lippi@emcrzdm.ncep.noaa.gov:/home/www/emc/htdocs/mmb/dlippi/rrfs_sciEval_stagedataStatus
+fi
+

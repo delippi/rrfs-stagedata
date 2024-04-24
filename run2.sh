@@ -10,6 +10,15 @@ edate=2023070700
 
 dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 
+tasks=""
+tasks="$tasks get_raphrrrsoil.ksh"
+tasks="$tasks gvf.ksh"
+tasks="$tasks lightning.ksh"
+tasks="$tasks obsrap.ksh"
+tasks="$tasks snow.ksh"
+tasks="$tasks sst.ksh"
+tasks="$tasks fed_fulldisk.ksh"
+
 # create date list string like "01 02 03 04 05 06 07"
 DLIST=""
 date=$sdate
@@ -23,9 +32,6 @@ YYYY=`echo $sdate | cut -c 1-4`
 MM=`echo $sdate | cut -c 5-6`
 SDAY=`echo $sdate | cut -c 7-8`
 EDAY=`echo $edate | cut -c 7-8`
-
-tasks="get_raphrrrsoil.ksh gvf.ksh lightning.ksh obsrap.ksh snow.ksh sst.ksh fed_fulldisk.ksh"
-tasks="fed_fulldisk.ksh"
 
 echo "cd scripts2"
 for task in $tasks; do
