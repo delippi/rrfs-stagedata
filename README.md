@@ -31,13 +31,13 @@ RAP conventional observation: obsrap.ksh, zip file contain several types of data
 Radar reflectivity: use refl.ksh to get MRMS reflectivity data and unzip files. It’s almost 23K files/day, the files are saved under upperair/mrms/conus/MergedReflectivityQC automatically, so usually I put data in tmp directory, if all data looks good, then  move data day by day to the desired location, for example, 
             mv tmp/upperair/mrms/conus/MergedReflectivityQC/*20230610*   reflectivity/
 	
-	Another path for reflectivity: /BMC/fdr/Permanent/YYYY/MM/DD/data/radar/mrms, 
-	Script: /scratch2/BMC/zrtrr/rli/data/refl_gsl.ksh
+	If data is missing using above script, try another path for reflectivity: /BMC/fdr/Permanent/YYYY/MM/DD/data/radar/mrms, 
+	Script: refl_gsl.ksh
 
 
 Data Assimilation scripts:
                  
- mesonet use list and amdar reject list are saved on Jet at
+mesonet use list and amdar reject list are saved on Jet at
 AIRCRAFT_REJECT="/home/role.amb-verif/acars_RR/amdar_reject_lists"
 SFCOBS_USELIST="/lfs4/BMC/amb-verif/rap_ops_mesonet_uselists"
 
@@ -52,8 +52,7 @@ RRFS ensemble
 retrieve_dsg_GEFS.sh: pull GEFS GRIB-2 data for initializing the RRFS ensemble
 Fill_GEFS_from_aws.sh: pull GEFS data from AWS and fill the DSG GEFS data gap
             
-            Previous 30 hr GEFS data is needed,  if retro run starts on July 20 03Z, you need to 
-            stage July 19 00Z members also.
+Previous 30 hr GEFS data is needed,  if retro run starts on July 20 03Z, you need to stage July 19 00Z members also.
  
 If need to interpolate the 3-hourly GEFS data to hourly data, please refer to the scripts at  https://github.com/NOAA-GSL/GEFS_time_interpolation
 
