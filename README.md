@@ -31,9 +31,6 @@ RAP conventional observation: obsrap.ksh, zip file contain several types of data
 Radar reflectivity: use refl.ksh to get MRMS reflectivity data and unzip files. It’s almost 23K files/day, the files are saved under upperair/mrms/conus/MergedReflectivityQC automatically, so usually I put data in tmp directory, if all data looks good, then  move data day by day to the desired location, for example, 
             mv tmp/upperair/mrms/conus/MergedReflectivityQC/*20230610*   reflectivity/
 	
-	If data is missing using above script, try another path for reflectivity: /BMC/fdr/Permanent/YYYY/MM/DD/data/radar/mrms, 
-	Script: refl_gsl.ksh
-
 
 Data Assimilation scripts:
                  
