@@ -57,20 +57,23 @@ do
   mkdir -p ${yymm}${i}
   cd ${yymm}${i}
 
-  # Before July 2022: rap and hrrr tar file name
-  #hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_rap_prod_rap.${yymm}${i}00-05.init.tar .
-  #hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_hrrr_prod_hrrr.${yymm}${i}_conus00-05.init.tar .
-  #hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_hrrr_prod_hrrr.${yymm}${i}_alaska00-05.init.tar .
+  if [[ ${yymm}${i} -ge 20220701 ]]; then
+    # After July 2022, rap and hrrr tar file name changed
+    hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_rap_v5.1_rap.${yymm}${i}00-05.init.tar .
+    hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_hrrr_v4.1_hrrr.${yymm}${i}_conus00-05.init.tar .
+    #hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_hrrr_v4.1_hrrr.${yymm}${i}_alaska00-05.init.tar .
+  elif [[ ${yymm}${i} -ge 20200101 ]]; then
+    # Before July 2022: rap and hrrr tar file name
+    hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_rap_prod_rap.${yymm}${i}00-05.init.tar .
+    hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_hrrr_prod_hrrr.${yymm}${i}_conus00-05.init.tar .
+    #hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_hrrr_prod_hrrr.${yymm}${i}_alaska00-05.init.tar .
+  fi
 
   #tar xvf ./com_rap_v5.1_rap.${yymm}${i}00-05.init.tar              ./rap.t04z.wrf_inout_smoke
   #tar xvf ./com_hrrr_v4.1_hrrr.${yymm}${i}_conus00-05.init.tar      ./hrrr.t04z.wrf_inout
   #tar xvf ./com_hrrr_v4.1_hrrr.${yymm}${i}_alaska00-05.init.tar     ./hrrrak.t03z.wrf_inout
 
 
-  # After July 2022, rap and hrrr tar file name changed
-  hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_rap_v5.1_rap.${yymm}${i}00-05.init.tar .
-  hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_hrrr_v4.1_hrrr.${yymm}${i}_conus00-05.init.tar .
-  #hsi get /NCEPPROD/1year/hpssprod/runhistory/rh${yy}/${yymm}/${yymm}${i}/com_hrrr_v4.1_hrrr.${yymm}${i}_alaska00-05.init.tar .
 
   tar xvf ./com_rap_v5.1_rap.${yymm}${i}00-05.init.tar              ./rap.t04z.wrf_inout_smoke
   tar xvf ./com_hrrr_v4.1_hrrr.${yymm}${i}_conus00-05.init.tar      ./hrrr.t04z.wrf_inout

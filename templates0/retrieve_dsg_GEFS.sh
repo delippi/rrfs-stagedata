@@ -18,7 +18,7 @@
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
 #PBS -N retrieve_dsg_gefs
-#PBS -j oe -o log.retrieve_dsg_gefs.@YYYY@@MM@@DD@_mem@mem_start@-mem@mem_end@
+#PBS -j oe -o log.retrieve_dsg_gefs.@YYYY@@MM@@DD@_mem@mem_a@-mem@mem_b@
 
 set -x
 
@@ -41,7 +41,7 @@ cd $dataloc
 mkdir -p GEFS/dsg
 cd GEFS/dsg
 
-# /BMC/fdr/Permanent/2021/03/25/grib/gens_pgrb2b/gep01/7/2/107/0_259920_0/: 202103251200.zip   202103251800.zip 
+# /BMC/fdr/Permanent/2021/03/25/grib/gens_pgrb2b/gep01/7/2/107/0_259920_0/: 202103251200.zip   202103251800.zip
 
 sourcedir1=/BMC/fdr/Permanent/
 sourcedir2=/grib/gens_pgrb2b
@@ -61,7 +61,7 @@ for yyyymmdd in  @YYYY@@MM@@DD@ ; do
   dd="${yyyymmdd:6:2}"
   doy=`date  --date=$yyyymmdd +%j `
 
-  for mem in $(seq -w @mem_start@ @mem_end@);  do
+  for mem in $(seq -w @mem_a@ @mem_b@);  do
     mkdir -p $stagedir/gep${mem}
     cd $stagedir/gep${mem}
     for hh in $(seq -w 0 6 18) ; do

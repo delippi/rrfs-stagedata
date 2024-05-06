@@ -4,9 +4,9 @@ export ndate="/u/donald.e.lippi/bin/ndate"
 mkdir -p ./scripts2
 
 #set -ax
-
-sdate=2023070100
-edate=2023070700
+#2023070100-2023073118
+sdate=2023070400; edate=2023071100 # summer
+sdate=2022020100; edate=2022020200 # summer
 
 dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 
@@ -18,6 +18,8 @@ tasks="$tasks obsrap.ksh"
 tasks="$tasks snow.ksh"
 tasks="$tasks sst.ksh"
 tasks="$tasks fed_fulldisk.ksh"
+tasks="$tasks rave.ksh"
+#tasks=""
 
 # create date list string like "01 02 03 04 05 06 07"
 DLIST=""

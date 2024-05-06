@@ -64,10 +64,17 @@ for HH in 00 06 12 18; do
  # for i in $(seq 1 8); do
   for i in $(seq 1 3); do
 
-    #tarfile=${HPSSDIR}/gpfs_dell1_nco_ops_com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar     # 2020 tar file name
-    #tarfile=${HPSSDIR}/com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # 2021 tar file name
-    #tarfile=${HPSSDIR}/com_gfs_v16.2_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # start from June 27 2022, tar file name
-    tarfile=${HPSSDIR}/com_gfs_v16.3_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # start from Nov. 29 2022, tar file name
+
+    if [[ ${YYYY}${MM}${DD} -ge 20221129 ]]; then
+      tarfile=${HPSSDIR}/com_gfs_v16.3_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                       # start from Nov. 29 2022, tar file name
+    elif [[ ${YYYY}${MM}${DD} -ge 20220627 ]]; then
+      tarfile=${HPSSDIR}/com_gfs_v16.2_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                       # start from June 27 2022, tar file name
+    elif [[ ${YYYY}${MM}${DD} -ge 20210101 ]]; then
+      tarfile=${HPSSDIR}/com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar                        # 2021 tar file name
+    elif [[ ${YYYY}${MM}${DD} -ge 20200101 ]]; then
+      tarfile=${HPSSDIR}/gpfs_dell1_nco_ops_com_gfs_prod_enkfgdas.${YYYY}${MM}${DD}_${HH}.enkfgdas_grp${i}.tar     # 2020 tar file name
+    fi
+
 
 
 

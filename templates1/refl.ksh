@@ -42,19 +42,22 @@ cd $dataloc
 mkdir -p reflectivity
 cd reflectivity
 
-yy=@YYYY@
-mm=@MM@
+YYYY=@YYYY@
+MM=@MM@
 
-for dd in $(seq -w @DD@ @DD@); do
+for DD in $(seq -w @DD@ @DD@); do
 
- # 2020-Jun. 2022
- #htar -xvf /NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}/dcom_prod_ldmdata_obs.tar ./upperair/mrms/conus/MergedReflectivityQC/MergedReflectivityQC_*_${yy}${mm}${dd}-*.grib2.gz
+ if [[ ${YYYY}${MM}${DD} -ge 20220701 ]]; then
+   # start from Jul. 2022, tar file name changed
+   htar -xvf /NCEPPROD/hpssprod/runhistory/rh${YYYY}/${YYYY}${MM}/${YYYY}${MM}${DD}/dcom_ldmdata_obs.tar ./upperair/mrms/conus/MergedReflectivityQC/MergedReflectivityQC_*_${YYYY}${MM}${DD}-*.grib2.gz
+ elif [[ ${YYYY}${MM}${DD} -ge 20200101 ]]; then
+   # 2020-Jun. 2022
+   htar -xvf /NCEPPROD/hpssprod/runhistory/rh${YYYY}/${YYYY}${MM}/${YYYY}${MM}${DD}/dcom_prod_ldmdata_obs.tar ./upperair/mrms/conus/MergedReflectivityQC/MergedReflectivityQC_*_${YYYY}${MM}${DD}-*.grib2.gz
+ fi
 
- # start from Jul. 2022, tar file name changed
- htar -xvf /NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}/dcom_ldmdata_obs.tar ./upperair/mrms/conus/MergedReflectivityQC/MergedReflectivityQC_*_${yy}${mm}${dd}-*.grib2.gz
 
  cd upperair/mrms/conus/MergedReflectivityQC
- for file in `ls MergedReflectivityQC_*_${yy}${mm}${dd}-*.grib2.gz  `
+ for file in `ls MergedReflectivityQC_*_${YYYY}${MM}${DD}-*.grib2.gz  `
  do
    gzip -d ${file}
  done
