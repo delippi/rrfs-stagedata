@@ -25,11 +25,15 @@ done
 
 # Define a good date without missing data to compare against any date.
 goodDate=20230704
-spdy=20230704; epdy=20230711  # summer 2023 retro period
+spdy=20230704; epdy=20230711; retro="summer"  # summer 2023 retro period
 #spdy=20230705; epdy=20230705  # summer 2023 retro period
 
 # Define data directory
-dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+if [[ $retro == "summer" ]]; then
+  dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+elif [[ $retro == "winter" ]]; then
+  dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+fi
 scriptsloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts"
 
 # Define missing data location

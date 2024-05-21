@@ -18,7 +18,7 @@
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
 #PBS -N get_satLightningObs
-#PBS -j oe -o log.satLightningObs
+#PBS -j oe -o log.satLightningObs.@SDAY@_@EDAY@
 
 #-------------------------------------------#
 # full-disk satellite lightning observation #

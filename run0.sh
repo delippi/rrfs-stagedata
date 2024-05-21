@@ -2,31 +2,86 @@
 
 mkdir -p ./scripts0
 
-#set -ax
+# ==============================================================================
+usage() {
+  set +x
+  echo
+  echo "Usage: $0 -p <period> | -s <spdy> | -e <epdy> -h"
+  echo
+  echo "  -p  retro period <period>      DEFAULT: <none>"
+  echo "  -s  retro start date <spdy>    DEFAULT: <none>"
+  echo "  -e  retro end date <epdy>      DEFAULT: <none>"
+  echo "  -m  run manually               DEFAULT: NO"
+  echo "  -h  display this message and quit"
+  exit 1
+}
 
-#YYYY=2023; MM=07; D1=04; D2=11 # summer
-YYYY=2022; MM=02; D1=01; D2=01 # winter
-dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+# ==============================================================================
 
-# For dsg GEFS
-#mem_start=01; mem_end=04
-#mem_start=05; mem_end=08
-#mem_start=09; mem_end=12
-#mem_start=13; mem_end=16
-#mem_start=17; mem_end=20
-#mem_start=21; mem_end=24
-#mem_start=25; mem_end=27
-#mem_start=28; mem_end=30
+retro=""
+while getopts "p:s:e:h" opt; do
+  case $opt in
+    p)
+      retro=$OPTARG
+      ;;
+    s)
+      spdy=$OPTARG
+      ;;
+    e)
+      epdy=$OPTARG
+      ;;
+    e)
+      run_manually="NO"
+      ;;
+  esac
+done
 
-#DD="05"; mem_start=01 ; mem_end=30
-#DD="06"; mem_start=01 ; mem_end=30
+# Run manually
+if [[ $retro == "" ]]; then
+  echo "Running manually"
+  retro="summer"
+  #retro="winter"
+  if [[ $retro == "summer" ]]; then
+    spdy=20230719
+    epdy=20230719
+  elif [[ $retro == "winter" ]]; then
+    spdy=20220210
+    epdy=20220210
+  fi
+fi
 
-mem_start=01; mem_end=30; mem_concurrent=3 # usually no more than 4 at a time.
+YYYY=`echo $spdy | cut -c 1-4`
+MM=`echo $spdy | cut -c 5-6`
+D1=`echo $spdy | cut -c 7-8`
+D2=`echo $epdy | cut -c 7-8`
+
+if [[ $retro == "summer" ]]; then
+  dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+elif [[ $retro == "winter" ]]; then
+  dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+fi
+
+mem_start=01; mem_end=30; mem_concurrent=2 # usually no more than 4 at a time.
+#mem_start=01; mem_end=01; mem_concurrent=1 # usually no more than 4 at a time.
+#mem_start=01; mem_end=30; mem_concurrent=1 # usually no more than 4 at a time.
+#mem_start=23; mem_end=23; mem_concurrent=1 # usually no more than 4 at a time.
+#mem_start=9; mem_end=9; mem_concurrent=1 # usually no more than 4 at a time.
+
+echo "You are about to stage data for the period"
+echo "  period: $retro"
+echo "  starting: ${YYYY}${MM}${D1}"
+echo "  ending: ${YYYY}${MM}${D2}"
+echo "  in stage dir: $dataloc"
+echo "  command: $cmd"
+echo "---------------------------------------------------"
+echo ""
+read -p "Continue? (y/n) " ans
+if [[ $ans != "y" ]]; then
+  exit
+fi
+
 
 echo "cd scripts0"
-#for DD in $(seq -w 04 11) ; do
-#for DD in $(seq -w 08 11) ; do
-#for DD in $(seq -w 05 06) ; do
 for DD in $(seq -w $D1 $D2) ; do
 
   date=${YYYY}${MM}${DD}
@@ -35,7 +90,7 @@ for DD in $(seq -w $D1 $D2) ; do
   filename0=retrieve_dsg_GEFS.sh  # can usually do about 4-5 members in 6h
 
   memid1=$mem_start
-  while [[ $memid1 -lt $mem_end ]]; do
+  while [[ $memid1 -le $mem_end ]]; do
     (( memid2 = $memid1 + $mem_concurrent - 1 ))
     if [[ $memid2 -ge 30 ]]; then
       memid2=30
