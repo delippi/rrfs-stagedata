@@ -1,6 +1,5 @@
 #!/bin/sh
 
-export ndate="/u/donald.e.lippi/bin/ndate"
 mkdir -p ./scripts2
 
 # ==============================================================================
@@ -62,21 +61,16 @@ elif [[ $retro == "winter" ]]; then
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
 fi
 
-sdate=${YYYY}${MM}${D1}00
-edate=${YYYY}${MM}${D2}00
 
-tasks=""
-tasks="$tasks get_raphrrrsoil.ksh"
-tasks="$tasks gvf.ksh"
-tasks="$tasks lightning.ksh"
-tasks="$tasks obsrap.ksh"
-tasks="$tasks snow.ksh"
-tasks="$tasks sst.ksh"
-tasks="$tasks fed_fulldisk.ksh"
-tasks="$tasks rave.ksh"
-#tasks=""
-#tasks="$tasks fed_fulldisk.ksh"
-#tasks="$tasks rave.ksh"
+filenames0=""
+filenames0="$filenames0 get_raphrrrsoil.ksh"
+filenames0="$filenames0 gvf.ksh"
+filenames0="$filenames0 lightning.ksh"
+filenames0="$filenames0 obsrap.ksh"
+filenames0="$filenames0 snow.ksh"
+filenames0="$filenames0 sst.ksh"
+filenames0="$filenames0 fed_fulldisk.ksh"
+filenames0="$filenames0 rave.ksh"
 
 echo "You are about to stage data for the period"
 echo "  period: $retro"
@@ -90,29 +84,22 @@ if [[ $ans != "y" ]]; then
   exit
 fi
 
-# create date list string like "01 02 03 04 05 06 07"
-DLIST=""
-date=$sdate
-while [[ $date -le $edate ]]; do
-  DD=`echo $date | cut -c 7-8`
-  DLIST="$DLIST $DD"
-  date=`ndate 24 $date`
-done
-
-YYYY=`echo $sdate | cut -c 1-4`
-MM=`echo $sdate | cut -c 5-6`
-SDAY=`echo $sdate | cut -c 7-8`
-EDAY=`echo $edate | cut -c 7-8`
 
 echo "cd scripts2"
-for task in $tasks; do
-  cp templates2/$task ./scripts2/$task
-  sed -i "s/@YYYY@/${YYYY}/g"       ./scripts2/$task
-  sed -i "s/@MM@/${MM}/g"           ./scripts2/$task
-  sed -i "s/@DLIST@/${DLIST}/g"     ./scripts2/$task
-  sed -i "s/@SDAY@/${SDAY}/g"       ./scripts2/$task
-  sed -i "s/@EDAY@/${EDAY}/g"       ./scripts2/$task
-  sed -i "s#@DATALOC@#${dataloc}#g" ./scripts2/$task
+#for DD in $(seq -w 04 11) ; do
+for DD in $(seq -w $D1 $D2) ; do
 
-  echo "qsub $task"
+  date=${YYYY}${MM}${DD}
+
+  for filename0 in $filenames0; do
+    # Generic copy and sed commands
+    filename1=${filename0}_${date}
+    cp templates2/$filename0 ./scripts2/$filename1
+    sed -i "s/@YYYY@/${YYYY}/g"       ./scripts2/$filename1
+    sed -i "s/@MM@/${MM}/g"           ./scripts2/$filename1
+    sed -i "s/@DD@/${DD}/g"       ./scripts2/$filename1
+    sed -i "s#@DATALOC@#${dataloc}#g" ./scripts2/$filename1
+    echo "qsub ${filename1}"
+  done
 done
+echo "cd .."

@@ -38,13 +38,12 @@ while getopts ":nuseh" opt; do
   esac
 done
 
-dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
 
 #spdy=20230610; epdy=20230618  # spring 2023 retro period
 #spdy=20230701; epdy=20230707  # summer 2023 retro period
-#spdy=20230704; epdy=20230711  # summer 2023 retro period
-spdy=20220201; epdy=20220201  # winter 2022 retro period 
+spdy=20230704; epdy=20230712; retro="summer"  # summer 2023 retro period
+spdy=20220201; epdy=20220205; retro="winter"  # winter 2022 retro period 
 
 check_gvf="YES"               # check gvf; gvf.ksh
 check_highres_sst="YES"       # check highres_sst; sst.ksh
@@ -69,6 +68,12 @@ check_satFED="YES"            # check sat (fed-lightning);
 #check_GEFS="NO"              # check GEFS; retrieve_dsg_GEFS.sh
 #check_RAVE="NO"              # check RAVE;
 #check_satFED="NO"            # check sat (fed-lightning);
+
+if [[ $retro == "summer" ]]; then
+  dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+elif [[ $retro == "winter" ]]; then
+  dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+fi
 
 mkdir -p $stat
 cd $dataloc

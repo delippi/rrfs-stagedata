@@ -17,8 +17,8 @@
 #PBS -q dev_transfer
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
-#PBS -N get_satLightningObs
-#PBS -j oe -o log.satLightningObs.@SDAY@_@EDAY@
+#PBS -N get_satLightningObs.@YYYY@@MM@@DD@
+#PBS -j oe -o log.satLightningObs.@YYYY@@MM@@DD@
 
 #-------------------------------------------#
 # full-disk satellite lightning observation #
@@ -44,7 +44,7 @@ cd sat/nesdis/goes-east/glm/full-disk
 yy=@YYYY@
 mm=@MM@
 
-for day in  $(seq -w @SDAY@ @EDAY@); do
+for day in  $(seq -w @DD@ @DD@); do
     hsi get "/BMC/fdr/Permanent/${yy}/${mm}/${day}/data/sat/nesdis/goes-east/glm/full-disk/*.zip"
     unzip "*.zip" "*55000_e*" "*56000_e*" "*57000_e*" "*58000_e*" "*59000_e*"
     rm *.zip

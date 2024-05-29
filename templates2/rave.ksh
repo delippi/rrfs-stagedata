@@ -17,8 +17,8 @@
 #PBS -q dev_transfer
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
-#PBS -N local_rave
-#PBS -j oe -o log.RAVEObs
+#PBS -N local_rave.@YYYY@@MM@@DD@
+#PBS -j oe -o log.RAVEObs.@YYYY@@MM@@DD@
 
 #-------------------------------------------#
 # full-disk satellite lightning observation #
@@ -44,7 +44,7 @@ cd RAVE_RAW
 yy=@YYYY@
 mm=@MM@
 
-for day in  $(seq -w @SDAY@ @EDAY@); do
+for day in  $(seq -w @DD@ @DD@); do
     #Cactus
     cp -r /lfs/h2/emc/physics/noscrub/partha.bhattacharjee/RAVE_rawdata/RAVE_v2_Retro/${yy}${mm}${day}/ .
 done

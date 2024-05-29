@@ -17,8 +17,8 @@
 #PBS -q dev_transfer
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
-#PBS -N get_lightningObs
-#PBS -j oe -o log.lightningObs
+#PBS -N get_lightningObs.@YYYY@@MM@@DD@
+#PBS -j oe -o log.lightningObs.@YYYY@@MM@@DD@
 
 #-----------------------#
 # lightning observation #
@@ -32,7 +32,7 @@ cd lightning/vaisala/netcdf
 yy=@YYYY@
 mm=@MM@
 
-for day in  $(seq -w @SDAY@ @EDAY@); do 
+for day in  $(seq -w @DD@ @DD@); do 
   for cyc in 00
   do
     hsi get /BMC/fdr/Permanent/${yy}/${mm}/${day}/data/lightning/vaisala/netcdf/${yy}${mm}${day}${cyc}00.zip

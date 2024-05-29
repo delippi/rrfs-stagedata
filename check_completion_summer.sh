@@ -42,7 +42,7 @@ stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
 
 #spdy=20230610; epdy=20230618  # spring 2023 retro period
 #spdy=20230701; epdy=20230707  # summer 2023 retro period
-spdy=20230719; epdy=20230720; retro="summer"  # summer 2023 retro period
+spdy=20230724; epdy=20230727; retro="summer"  # summer 2023 retro period
 #spdy=20220201; epdy=20220205; retro="winter"  # winter 2022 retro period
 
 check_gvf="YES"               # check gvf; gvf.ksh

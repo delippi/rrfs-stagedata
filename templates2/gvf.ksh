@@ -17,8 +17,8 @@
 #PBS -q dev_transfer
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
-#PBS -N get_gvfObs
-#PBS -j oe -o log.gvfObs
+#PBS -N get_gvfObs.@YYYY@@MM@@DD@
+#PBS -j oe -o log.gvfObs.@YYYY@@MM@@DD@
 
 #------#
 # gvf
@@ -44,7 +44,7 @@ cd gvf/grib2
 yy=@YYYY@
 mm=@MM@
 
-for day in $(seq -w @SDAY@ @EDAY@); do
+for day in $(seq -w @DD@ @DD@); do
   hsi get /BMC/fdr/Permanent/${yy}/${mm}/${day}/data/sat/ncep/viirs/gvf/grib2/${yy}${mm}${day}0000.zip
   unzip ${yy}${mm}${day}0000.zip
   rm ${yy}${mm}${day}0000.zip

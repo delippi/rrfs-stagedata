@@ -57,11 +57,12 @@ D2=`echo $epdy | cut -c 7-8`
 
 if [[ $retro == "summer" ]]; then
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+  mem_start=01; mem_end=30; mem_concurrent=1 # usually no more than 4 at a time.
 elif [[ $retro == "winter" ]]; then
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+  mem_start=01; mem_end=30; mem_concurrent=1 # usually no more than 4 at a time.
 fi
 
-mem_start=01; mem_end=30; mem_concurrent=2 # usually no more than 4 at a time.
 #mem_start=01; mem_end=01; mem_concurrent=1 # usually no more than 4 at a time.
 #mem_start=01; mem_end=30; mem_concurrent=1 # usually no more than 4 at a time.
 #mem_start=23; mem_end=23; mem_concurrent=1 # usually no more than 4 at a time.

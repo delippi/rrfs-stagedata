@@ -17,8 +17,8 @@
 #PBS -q dev_transfer
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
-#PBS -N get_rapObs
-#PBS -j oe -o log.rapObs
+#PBS -N get_rapObs.@YYYY@@MM@@DD@
+#PBS -j oe -o log.rapObs.@YYYY@@MM@@DD@
 
 #-----------------#
 # rap observation #
@@ -45,7 +45,7 @@ cd obs_rap
 yy=@YYYY@
 mm=@MM@
 
-for day in $(seq -w @SDAY@ @EDAY@); do
+for day in $(seq -w @DD@ @DD@); do
   for cyc in 00 06 12 18
   do
     hsi get /BMC/fdr/Permanent/${yy}/${mm}/${day}/data/grids/rap/obs/${yy}${mm}${day}${cyc}00.zip

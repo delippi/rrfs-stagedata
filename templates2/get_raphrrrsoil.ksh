@@ -17,8 +17,8 @@
 #PBS -q dev_transfer
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
-#PBS -N get_raphrrrsoil
-#PBS -j oe -o log.rapsoil
+#PBS -N get_raphrrrsoil.@YYYY@@MM@@DD@
+#PBS -j oe -o log.rapsoil.@YYYY@@MM@@DD@
 
 #------#
 # rap_soil
@@ -52,7 +52,7 @@ yy=@YYYY@
 yymm=@YYYY@@MM@
 
 #for i in 11 12 13 14 15 16 17 18
-for i in @DLIST@
+for i in @DD@
 do
   mkdir -p ${yymm}${i}
   cd ${yymm}${i}

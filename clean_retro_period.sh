@@ -7,13 +7,13 @@ retro="winter"
 #retro="summer"
 
 if [[ $retro == "summer" ]]; then
-  spdy=20230715
-  #epdy=20230712
-  epdy=$spdy
+  spdy=20230720
+  epdy=20230722
+  #epdy=$spdy
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
-  spdy=20220205
-  epdy=20220207
+  spdy=20220211
+  epdy=20220212
   #epdy=$spdy
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
 fi

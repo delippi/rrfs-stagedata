@@ -1,18 +1,19 @@
 #!/bin/sh
 
-#retro="winter"
+retro="winter"
 retro="summer"
 
 if [[ $retro == "summer" ]]; then
   YYYY=2023
   MM=07
-  D1=19
-  D2=20
+  D1=26
+  D2=27
 elif [[ $retro == "winter" ]]; then
   YYYY=2022
   MM=02
-  D1=10
-  D2=10
+  D1=16
+  #D2=13
+  D2=$D1
 fi
 
 spdy=${YYYY}${MM}${D1}
