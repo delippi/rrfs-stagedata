@@ -40,7 +40,7 @@ done
 
 stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
 
-spdy=20220218; epdy=20220222; retro="winter"  # winter 2022 retro period 
+spdy=20230601; epdy=20230601; retro="spring"  # spring 2023 retro period
 
 check_gvf="YES"               # check gvf; gvf.ksh
 check_highres_sst="YES"       # check highres_sst; sst.ksh
@@ -169,7 +169,8 @@ data:
     dir="RAVE_RAW/"
     mkdir -p $dir
     #num=`find $dir -name "RAVE*s${pdy}*" | wc`
-    num=`find $dir -name "RAVE*${pdy}*" | wc`
+    #num=`find $dir -name "RAVE*${pdy}*" | wc`
+    num=`find $dir -name "Hourly_Emissions*${pdy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 24 ))  # 1 files for each day
     echo "RAVE/          $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy

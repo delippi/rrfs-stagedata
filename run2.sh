@@ -59,6 +59,8 @@ if [[ $retro == "summer" ]]; then
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+elif [[ $retro == "spring" ]]; then
+  dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi
 
 

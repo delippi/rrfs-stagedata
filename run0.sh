@@ -61,6 +61,9 @@ if [[ $retro == "summer" ]]; then
 elif [[ $retro == "winter" ]]; then
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
   mem_start=01; mem_end=30; mem_concurrent=1 # usually no more than 4 at a time.
+elif [[ $retro == "spring" ]]; then
+  dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
+  mem_start=01; mem_end=30; mem_concurrent=1 # usually no more than 4 at a time.
 fi
 
 #mem_start=01; mem_end=01; mem_concurrent=1 # usually no more than 4 at a time.

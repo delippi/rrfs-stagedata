@@ -40,10 +40,7 @@ done
 
 stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
 
-#spdy=20230610; epdy=20230618  # spring 2023 retro period
-#spdy=20230701; epdy=20230707  # summer 2023 retro period
-spdy=20230724; epdy=20230727; retro="summer"  # summer 2023 retro period
-#spdy=20220201; epdy=20220205; retro="winter"  # winter 2022 retro period
+spdy=20230725; epdy=20230731; retro="summer"  # summer 2023 retro period
 
 check_gvf="YES"               # check gvf; gvf.ksh
 check_highres_sst="YES"       # check highres_sst; sst.ksh
@@ -73,6 +70,8 @@ if [[ $retro == "summer" ]]; then
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+elif [[ $retro == "spring" ]]; then
+  dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi
 
 mkdir -p $stat
