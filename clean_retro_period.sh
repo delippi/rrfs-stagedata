@@ -4,18 +4,23 @@ export ndate="/u/donald.e.lippi/bin/ndate"
 
 ##################
 retro="winter"
-retro="summer"
+#retro="summer"
+#retro="spring"
 
 if [[ $retro == "summer" ]]; then
-  spdy=20230724
-  epdy=20230724
+  spdy=20230728
+  epdy=20230728
   #epdy=$spdy
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
-  spdy=20220213
-  epdy=20220213
+  spdy=20220217
+  epdy=20220217
   #epdy=$spdy
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+elif [[ $retro == "spring" ]]; then
+  spdy=20230601
+  epdy=20230601
+  dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi
 
 #cmd="rm -rf"
