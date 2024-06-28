@@ -4,22 +4,22 @@ export ndate="/u/donald.e.lippi/bin/ndate"
 
 ##################
 #retro="winter"
-#retro="summer"
-retro="spring"
+retro="summer"
+#retro="spring"
 
 if [[ $retro == "summer" ]]; then
-  spdy=20230730
-  epdy=20230730
+  spdy=20230701
+  epdy=20230707
   #epdy=$spdy
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
-  spdy=20220221
-  epdy=20220222
+  spdy=20220224
+  epdy=20220228
   #epdy=$spdy
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "spring" ]]; then
-  spdy=20230603
-  epdy=20230603
+  spdy=20230606
+  epdy=20230610
   dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi
 
@@ -71,9 +71,12 @@ while [[ $pdy -le $epdy ]]; do
   #GEFS
   echo " - purging GEFS data"
   ${cmd} GEFS/dsg/gep*/${yy}${dayOfYear}*00*
+  echo " - purging gfs data"
+  ${cmd} gfs/0p25deg/grib2/${yy}${dayOfYear}*
   #obs rap
   echo " - purging RAP obs"
   ${cmd} obs_rap/${pdy}*rap*
+  ${cmd} obs_rap/${pdy}*rtma*
   #gvf
   echo " - purging gvf"
   ${cmd} gvf/grib2/*_e${pdy}*.grib2
@@ -82,13 +85,18 @@ while [[ $pdy -le $epdy ]]; do
   ${cmd} highres_sst/${yy}${dayOfYear}*00*
   #rap_hrrr_soil
   echo " - purging soil"
-  ${cmd} rap_hrrr_soil/${pdy}
+  ${cmd} rap_hrrr_soil/${pdy}*
   #reflectivity
   echo " - purging dbz"
   ${cmd} reflectivity/upperair/mrms/conus/MergedReflectivityQC/*${pdy}*grib2
   #snow
   echo " - purging snow"
   ${cmd} snow/ims96/grib2/${yy}${dayOfYear}*00*
+  echo " - purging lightning"
+  ${cmd} sat/nesdis/goes-east/glm/full-disk/*GLM*s${yyyy}${dayOfYear}*nc
+  ${cmd} lightning/vaisala/netcdf/${yy}${dayOfYear}*
+  echo " - purging RAVE"
+  ${cmd} RAVE_RAW/*${pdy}*
 
   # update pdy
   date=`ndate 24 ${pdy}00`
