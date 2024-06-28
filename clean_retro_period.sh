@@ -5,7 +5,7 @@ export ndate="/u/donald.e.lippi/bin/ndate"
 ##################
 retro="winter"
 #retro="summer"
-#retro="spring"
+retro="spring"
 
 if [[ $retro == "summer" ]]; then
   spdy=20230701
@@ -60,7 +60,7 @@ pdy=$spdy
 
 while [[ $pdy -le $epdy ]]; do
   #dayOfYear=`doy $pdy | awk '{print $4}'`
-  dayOfYear=`doy 20220224 | awk '{printf "%03d\n", $4}'`
+  dayOfYear=`doy $pdy | awk '{printf "%03d\n", $4}'`
   echo "current date: $pdy @ $dayOfYear"
   yy=`echo $pdy | cut -c 3-4`
 
