@@ -18,8 +18,8 @@ elif [[ $retro == "winter" ]]; then
   #epdy=$spdy
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "spring" ]]; then
-  spdy=20230603
-  epdy=20230603
+  spdy=20230628
+  epdy=20230628
   dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi
 
@@ -67,13 +67,18 @@ while [[ $pdy -le $epdy ]]; do
   #enkf
   echo " - purging enkf data"
   ${cmd} enkf/atm/${yy}${dayOfYear}*atm*nc
+  ${cmd} enkf/atm/${yy}${dayOfYear}*sfc*nc
   ${cmd} enkf/atm/${dir}/enkfgdas.${pdy}
   #GEFS
   echo " - purging GEFS data"
   ${cmd} GEFS/dsg/gep*/${yy}${dayOfYear}*00*
+  #gfs
+  echo " - purging gfs data"
+  ${cmd} gfs/0p25deg/grib2/${yy}${dayOfYear}*
   #obs rap
   echo " - purging RAP obs"
   ${cmd} obs_rap/${pdy}*rap*
+  ${cmd} obs_rap/${pdy}*rtma*
   #gvf
   echo " - purging gvf"
   ${cmd} gvf/grib2/*_e${pdy}*.grib2
