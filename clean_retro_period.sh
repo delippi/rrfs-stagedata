@@ -3,23 +3,23 @@ export doy="/u/donald.e.lippi/bin/doy"
 export ndate="/u/donald.e.lippi/bin/ndate"
 
 ##################
-#retro="winter"
+retro="winter"
 #retro="summer"
 retro="spring"
 
 if [[ $retro == "summer" ]]; then
-  spdy=20230730
-  epdy=20230730
+  spdy=20230701
+  epdy=20230707
   #epdy=$spdy
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
-  spdy=20220221
-  epdy=20220222
+  spdy=20220224
+  epdy=20220228
   #epdy=$spdy
   dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "spring" ]]; then
-  spdy=20230628
-  epdy=20230628
+  spdy=20230606
+  epdy=20230610
   dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi
 
@@ -59,7 +59,8 @@ fi
 pdy=$spdy
 
 while [[ $pdy -le $epdy ]]; do
-  dayOfYear=`doy $pdy | awk '{print $4}'`
+  #dayOfYear=`doy $pdy | awk '{print $4}'`
+  dayOfYear=`doy $pdy | awk '{printf "%03d\n", $4}'`
   echo "current date: $pdy @ $dayOfYear"
   yy=`echo $pdy | cut -c 3-4`
 
@@ -87,13 +88,18 @@ while [[ $pdy -le $epdy ]]; do
   ${cmd} highres_sst/${yy}${dayOfYear}*00*
   #rap_hrrr_soil
   echo " - purging soil"
-  ${cmd} rap_hrrr_soil/${pdy}
+  ${cmd} rap_hrrr_soil/${pdy}*
   #reflectivity
   echo " - purging dbz"
   ${cmd} reflectivity/upperair/mrms/conus/MergedReflectivityQC/*${pdy}*grib2
   #snow
   echo " - purging snow"
   ${cmd} snow/ims96/grib2/${yy}${dayOfYear}*00*
+  echo " - purging lightning"
+  ${cmd} sat/nesdis/goes-east/glm/full-disk/*GLM*s${yyyy}${dayOfYear}*nc
+  ${cmd} lightning/vaisala/netcdf/${yy}${dayOfYear}*
+  echo " - purging RAVE"
+  ${cmd} RAVE_RAW/*${pdy}*
 
   # update pdy
   date=`ndate 24 ${pdy}00`
