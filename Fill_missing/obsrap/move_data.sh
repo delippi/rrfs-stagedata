@@ -9,13 +9,15 @@ export ndate=/u/donald.e.lippi/bin/ndate
 #retro="summer"
 retro="spring"
 
-date=20230606
+#date=20240510
+date=20240518
 
 # WCOSS2:
 if [[ $retro == "summer" ]]; then
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
-  dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+  #dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+  dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "spring" ]]; then
   dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi

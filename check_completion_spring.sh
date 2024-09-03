@@ -40,8 +40,8 @@ done
 
 stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
 
-spdy=20230630; epdy=20230630; retro="spring"  # spring 2023 retro period
-#spdy=20240505; epdy=20240507; retro="spring"  # spring 2023 retro period
+#spdy=20230630; epdy=20230630; retro="spring"  # spring 2023 retro period
+spdy=20240518; epdy=20240522; retro="spring"  # spring 2023 retro period
 
 check_gvf="YES"               # check gvf; gvf.ksh
 check_highres_sst="YES"       # check highres_sst; sst.ksh
