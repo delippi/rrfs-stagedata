@@ -1,7 +1,5 @@
 #!/bin/sh
 
-mkdir -p ./scripts0
-
 # ==============================================================================
 usage() {
   set +x
@@ -35,6 +33,8 @@ while getopts "p:s:e:h" opt; do
       ;;
   esac
 done
+
+mkdir -p ./scripts0_${retro}
 
 # Run manually
 if [[ $retro == "" ]]; then
@@ -86,7 +86,7 @@ if [[ $ans != "y" ]]; then
 fi
 
 
-echo "cd scripts0"
+echo "cd scripts0_${retro}"
 for DD in $(seq -w $D1 $D2) ; do
 
   date=${YYYY}${MM}${DD}
@@ -107,13 +107,13 @@ for DD in $(seq -w $D1 $D2) ; do
     if [[ $filename0 == "retrieve_dsg_GEFS.sh" ]]; then
       filename1=${filename0}_${date}_mem${memid_str1}-mem${memid_str2}
     fi
-    cp templates0/${filename0}            ./scripts0/${filename1}
-    sed -i "s/@YYYY@/${YYYY}/g"           ./scripts0/${filename1}
-    sed -i "s/@MM@/${MM}/g"               ./scripts0/${filename1}
-    sed -i "s/@DD@/${DD}/g"               ./scripts0/${filename1}
-    sed -i "s/@mem_a@/${memid_str1}/g"    ./scripts0/${filename1}
-    sed -i "s/@mem_b@/${memid_str2}/g"    ./scripts0/${filename1}
-    sed -i "s#@DATALOC@#${dataloc}#g"     ./scripts0/${filename1}
+    cp templates0/${filename0}            ./scripts0_${retro}/${filename1}
+    sed -i "s/@YYYY@/${YYYY}/g"           ./scripts0_${retro}/${filename1}
+    sed -i "s/@MM@/${MM}/g"               ./scripts0_${retro}/${filename1}
+    sed -i "s/@DD@/${DD}/g"               ./scripts0_${retro}/${filename1}
+    sed -i "s/@mem_a@/${memid_str1}/g"    ./scripts0_${retro}/${filename1}
+    sed -i "s/@mem_b@/${memid_str2}/g"    ./scripts0_${retro}/${filename1}
+    sed -i "s#@DATALOC@#${dataloc}#g"     ./scripts0_${retro}/${filename1}
     echo "qsub ${filename1}"
     (( memid1 = $memid1 + $mem_concurrent ))
   done

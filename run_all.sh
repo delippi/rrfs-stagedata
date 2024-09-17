@@ -2,7 +2,7 @@
 
 retro="winter"
 #retro="summer"
-#retro="spring"
+retro="spring"
 
 if [[ $retro == "summer" ]]; then
   YYYY=2023
@@ -13,8 +13,8 @@ if [[ $retro == "summer" ]]; then
 elif [[ $retro == "winter" ]]; then
   YYYY=2022
   MM=02
-  D1=10
-  D2=11
+  D1=13
+  D2=13
   #D2=$D1
 elif [[ $retro == "spring" ]]; then
   #YYYY=2023
@@ -24,8 +24,8 @@ elif [[ $retro == "spring" ]]; then
   #D2=$D1
   YYYY=2024
   MM=05
-  D1=21
-  D2=22
+  D1=25
+  D2=26
   #D2=$D1
 fi
 

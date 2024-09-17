@@ -21,8 +21,8 @@ elif [[ $retro == "winter" ]]; then
 elif [[ $retro == "spring" ]]; then
   #spdy=20230629
   #epdy=20230630
-  spdy=20240515
-  epdy=20240515
+  spdy=20240520
+  epdy=20240521
   dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi
 

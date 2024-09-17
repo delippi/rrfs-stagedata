@@ -1,7 +1,5 @@
 #!/bin/sh
 
-mkdir -p ./scripts2
-
 # ==============================================================================
 usage() {
   set +x
@@ -35,6 +33,8 @@ while getopts "p:s:e:h" opt; do
       ;;
   esac
 done
+
+mkdir -p ./scripts2_${retro}
 
 # Run manually
 if [[ $retro == "" ]]; then
@@ -88,7 +88,7 @@ if [[ $ans != "y" ]]; then
 fi
 
 
-echo "cd scripts2"
+echo "cd scripts2_${retro}"
 #for DD in $(seq -w 04 11) ; do
 for DD in $(seq -w $D1 $D2) ; do
 
@@ -97,11 +97,11 @@ for DD in $(seq -w $D1 $D2) ; do
   for filename0 in $filenames0; do
     # Generic copy and sed commands
     filename1=${filename0}_${date}
-    cp templates2/$filename0 ./scripts2/$filename1
-    sed -i "s/@YYYY@/${YYYY}/g"       ./scripts2/$filename1
-    sed -i "s/@MM@/${MM}/g"           ./scripts2/$filename1
-    sed -i "s/@DD@/${DD}/g"       ./scripts2/$filename1
-    sed -i "s#@DATALOC@#${dataloc}#g" ./scripts2/$filename1
+    cp templates2/$filename0 ./scripts2_${retro}/$filename1
+    sed -i "s/@YYYY@/${YYYY}/g"       ./scripts2_${retro}/$filename1
+    sed -i "s/@MM@/${MM}/g"           ./scripts2_${retro}/$filename1
+    sed -i "s/@DD@/${DD}/g"       ./scripts2_${retro}/$filename1
+    sed -i "s#@DATALOC@#${dataloc}#g" ./scripts2_${retro}/$filename1
     echo "qsub ${filename1}"
   done
 done

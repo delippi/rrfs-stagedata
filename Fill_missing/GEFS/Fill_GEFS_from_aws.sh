@@ -18,7 +18,7 @@
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
 #PBS -N Fill_GEFS_from_aws
-#PBS -j oe -o log.Fill_GEFS_from_aws.20230705
+#PBS -j oe -o log.Fill_GEFS_from_aws.20240518
 
 # https://noaa-gefs-pds.s3.amazonaws.com/gefs.20220429/00/atmos/pgrb2ap5/gep01.t00z.pgrb2a.0p50.f114
 # https://noaa-gefs-pds.s3.amazonaws.com/gefs.20220429/00/atmos/pgrb2bp5/gep01.t00z.pgrb2b.0p50.f114
@@ -30,20 +30,21 @@ set -x
 # Hera:
 #datadir=/scratch2/BMC/zrtrr/RRFS_RETRO_DATA/GEFS
 # WCOSS2:
-datadir=/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata/GEFS/dsg
+#datadir=/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata/GEFS/dsg
+datadir=/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata/GEFS/dsg
 
 waittime=30
 maxtries=10
 
 #for dates in 20220131 2022020{0..8} 202306{09..18}
-for dates in 20230705
+for dates in 20240518
 do
   #for hh in 00 06 12 18
-  for hh in 18
+  for hh in 12
   do
     #for mems in {01..30}
     #for mems in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
-    for mems in 01 03 04 07 08 10 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
+    for mems in 01 04 06 10 11 15 16 18 25 27 29 30
     do
     mem=gep$( printf "%02d" $mems )
     #for fcsthr in {00..75..03}
