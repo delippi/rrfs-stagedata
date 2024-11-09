@@ -3,26 +3,26 @@ export doy="/u/donald.e.lippi/bin/doy"
 export ndate="/u/donald.e.lippi/bin/ndate"
 
 ##################
-retro="winter"
-#retro="summer"
-retro="spring"
+#retro="winter"
+retro="summer"
+#retro="spring"
 
 if [[ $retro == "summer" ]]; then
-  spdy=20230701
-  epdy=20230707
+  spdy=20230712
+  epdy=20230714
   #epdy=$spdy
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
-  spdy=20220203
-  epdy=20220203
+  spdy=20220207
+  epdy=20220209
   #epdy=$spdy
   #dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
   dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "spring" ]]; then
   #spdy=20230629
   #epdy=20230630
-  spdy=20240520
-  epdy=20240521
+  spdy=20240522
+  epdy=20240526
   dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 fi
 
@@ -64,8 +64,9 @@ pdy=$spdy
 while [[ $pdy -le $epdy ]]; do
   #dayOfYear=`doy $pdy | awk '{print $4}'`
   dayOfYear=`doy $pdy | awk '{printf "%03d\n", $4}'`
-  echo "current date: $pdy @ $dayOfYear"
   yy=`echo $pdy | cut -c 3-4`
+  yyyy=`echo $pdy | cut -c 1-4`
+  echo "current date: $pdy @ $dayOfYear"
 
   cd $dataloc
   #enkf

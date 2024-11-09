@@ -1,14 +1,14 @@
 #!/bin/sh
 
-retro="winter"
-#retro="summer"
-retro="spring"
+#retro="winter"
+retro="summer"
+#retro="spring"
 
 if [[ $retro == "summer" ]]; then
   YYYY=2023
   MM=07
-  D1=30
-  D2=31
+  D1=20
+  D2=22
   #D2=$D1
 elif [[ $retro == "winter" ]]; then
   YYYY=2022
@@ -24,8 +24,8 @@ elif [[ $retro == "spring" ]]; then
   #D2=$D1
   YYYY=2024
   MM=05
-  D1=25
-  D2=26
+  D1=30
+  D2=31
   #D2=$D1
 fi
 

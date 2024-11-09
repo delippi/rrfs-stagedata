@@ -10,7 +10,9 @@ export ndate=/u/donald.e.lippi/bin/ndate
 retro="spring"
 
 #date=20240510
-date=20240518
+#date=20240518
+#date=20240528
+date=20240531
 
 # WCOSS2:
 if [[ $retro == "summer" ]]; then

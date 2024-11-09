@@ -9,13 +9,16 @@ rm -f $directory/*listing
 #for dates in 20230606
 #for dates in 20230706
 #for dates in 20240510
-for dates in 20240518
+#for dates in 20240518
+#for dates in 20240528
+for dates in 20240531
 do
   #for hh in {0..11}
   #for hh in {0..5}
-  #for hh in {6..11}
+  for hh in {6..11}
   #for hh in {12..17}
-  for hh in {18..23}
+  #for hh in {18..23}
+  #for hh in {12..23}
   do
     hh=$( printf "%02d" $hh )
 

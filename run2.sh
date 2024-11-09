@@ -57,6 +57,7 @@ D2=`echo $epdy | cut -c 7-8`
 
 if [[ $retro == "summer" ]]; then
   dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+  #dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
   #dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata" #old location
   dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"

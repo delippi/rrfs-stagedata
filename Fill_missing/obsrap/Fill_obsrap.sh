@@ -18,7 +18,7 @@
 #PBS -l select=1:ncpus=1:mem=2G
 #PBS -l walltime=06:00:00
 #PBS -N Fill_obsrap
-#PBS -j oe -o log.Fill_rapobs.20240518
+#PBS -j oe -o log.Fill_rapobs.20240531
 
 # https://noaa-gefs-pds.s3.amazonaws.com/gefs.20220429/00/atmos/pgrb2ap5/gep01.t00z.pgrb2a.0p50.f114
 # https://noaa-gefs-pds.s3.amazonaws.com/gefs.20220429/00/atmos/pgrb2bp5/gep01.t00z.pgrb2b.0p50.f114
@@ -58,10 +58,10 @@ fi
 mkdir -p $datadir
 
 #for dates in 2023070{5..6}
-for dates in 20240518
+for dates in 20240531
 do
   #for hh in 00 06 12 18
-  for hh in 18
+  for hh in 06
   do
     (( hhp = $hh + 5 )) #e.g., 0, 1, 2, 3, 4, 5
     hhp=$( printf "%02d" $hhp )
@@ -73,7 +73,11 @@ do
     doy=`date  --date=$yyyymmdd +%j `
     cd $datadir
     hpss=/NCEPPROD/hpssprod/runhistory/rh${yyyy}/${yyyy}${mm}/${yyyymmdd}/
-    htar -xvf $hpss/com_obsproc_v1.1_rap.${yyyymmdd}${hh}-${hhp}.obsproc_bufr.tar
+    if [[ $yyyymmdd -ge 20240521 ]]; then
+      htar -xvf $hpss/com_obsproc_v1.2_rap.${yyyymmdd}${hh}-${hhp}.obsproc_bufr.tar
+    else
+      htar -xvf $hpss/com_obsproc_v1.1_rap.${yyyymmdd}${hh}-${hhp}.obsproc_bufr.tar
+    fi
     #echo "$hpss"
     #echo "com_obsproc_v1.1_rap.${yyyymmdd}${hh}-${hhp}.obsproc_bufr.tar"
   done
