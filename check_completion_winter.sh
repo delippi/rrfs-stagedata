@@ -40,7 +40,8 @@ done
 
 stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
 
-spdy=20220210; epdy=20220214; retro="winter"  # winter 2022 retro period 
+#spdy=20220210; epdy=20220214; retro="winter"  # winter 2022 retro period
+spdy=20240107; epdy=20240110; retro="winter"  # winter 2024 retro period
 
 check_gvf="YES"               # check gvf; gvf.ksh
 check_highres_sst="YES"       # check highres_sst; sst.ksh
@@ -176,7 +177,7 @@ data:
     echo "RAVE/          $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
-  # check sat FED lightning 
+  # check sat FED lightning
   if [[ $check_satFED == "YES" ]]; then
     dir="sat/nesdis/goes-east/glm/full-disk/"
     mkdir -p $dir
