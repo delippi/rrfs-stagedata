@@ -38,10 +38,8 @@ while getopts ":nuseh" opt; do
   esac
 done
 
-stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
+stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status/"
 
-spdy=20230704; epdy=20230708; retro="summer"  # summer 2023 retro period
-spdy=20230716; epdy=20230719; retro="summer"  # summer 2023 retro period
 spdy=20230723; epdy=20230723; retro="summer"  # summer 2023 retro period
 
 check_gvf="YES"               # check gvf; gvf.ksh
@@ -90,6 +88,7 @@ data:
 
   echo `doy $pdy` | tee -a ${stat}/status.$pdy
   doy=`doy $pdy | cut -f 4 -d " "`
+  #doy=`date -d $pdy +%j`
   doy=$(printf "%03d" $doy)
   yy=`echo $pdy | cut -c 3-4`
   yyyy=`echo $pdy | cut -c 1-4`
@@ -100,7 +99,8 @@ data:
     mkdir -p $dir
     num=`find $dir -name *nc | wc`
     num=`echo $num | cut -f 1 -d " "`
-    (( percent = 100 * $num / 560 ))  # 80 ensemble members x 4 synoptic times = 320/day
+    #(( percent = 100 * $num / 560 ))  # 80 ensemble members x 4 synoptic times = 320/day
+    (( percent = 100 * $num / 240 ))  # 80 ensemble members x 4 synoptic times = 320/day
     echo "enkf/atm/      $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
                                   #atm +30 ensemble members x 4 synoptic times = 440/day
                                   #sfc +30 ensemble members x 4 synoptic times = 560/day
@@ -171,14 +171,13 @@ data:
   if [[ $check_RAVE == "YES" ]]; then
     dir="RAVE_RAW/"
     mkdir -p $dir
-    #num=`find $dir -name "RAVE*s${pdy}*" | wc`
     num=`find $dir -name "RAVE*${pdy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 24 ))  # 1 files for each day
     echo "RAVE/          $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
-  # check sat FED lightning 
+  # check sat FED lightning
   if [[ $check_satFED == "YES" ]]; then
     dir="sat/nesdis/goes-east/glm/full-disk/"
     mkdir -p $dir
@@ -194,7 +193,8 @@ data:
     mkdir -p $dir
     num=`find $dir -name "${yy}${doy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
-    (( percent = 100 * $num / 320 ))  # 320 files for each day
+    #(( percent = 100 * $num / 320 ))  # 320 files for each day
+    (( percent = 100 * $num / 400 ))  # 400 files for each day (out to 99 hrs)
     echo "gfs/           $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
@@ -213,7 +213,8 @@ data:
   fi
 
 
-  (( pdy = pdy + 1 ))
+  #(( pdy = pdy + 1 ))
+  pdy=`ndate 24 ${pdy}00 | cut -c 1-8`
   echo ""
   if [[ $pause == "YES" ]]; then
     read -p "Continue to next day? (n)ext" ans

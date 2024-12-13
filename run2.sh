@@ -9,7 +9,7 @@ usage() {
   echo "  -p  retro period <period>      DEFAULT: <none>"
   echo "  -s  retro start date <spdy>    DEFAULT: <none>"
   echo "  -e  retro end date <epdy>      DEFAULT: <none>"
-  echo "  -m  run manually               DEFAULT: NO"
+  echo "  -d  location for staged data   DEFAULT: <none>"
   echo "  -h  display this message and quit"
   exit 1
 }
@@ -17,7 +17,7 @@ usage() {
 # ==============================================================================
 
 retro=""
-while getopts "p:s:e:h" opt; do
+while getopts "p:s:e:d:h" opt; do
   case $opt in
     p)
       retro=$OPTARG
@@ -28,42 +28,31 @@ while getopts "p:s:e:h" opt; do
     e)
       epdy=$OPTARG
       ;;
-    e)
-      run_manually="NO"
+    d)
+      dataloc=$OPTARG
       ;;
   esac
 done
 
 mkdir -p ./scripts2_${retro}
 
-# Run manually
-if [[ $retro == "" ]]; then
-  echo "Running manually"
-  retro="summer"
-  #retro="winter"
-  if [[ $retro == "summer" ]]; then
-    spdy=20230719
-    epdy=20230719
-  elif [[ $retro == "winter" ]]; then
-    spdy=20220210
-    epdy=20220210
-  fi
-fi
-
 YYYY=`echo $spdy | cut -c 1-4`
 MM=`echo $spdy | cut -c 5-6`
 D1=`echo $spdy | cut -c 7-8`
 D2=`echo $epdy | cut -c 7-8`
 
-if [[ $retro == "summer" ]]; then
-  dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
-  #dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
-elif [[ $retro == "winter" ]]; then
-  #dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata" #old location
-  dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
-elif [[ $retro == "spring" ]]; then
-  dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
-fi
+#if [[ $retro == "summer" ]]; then
+#  #dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+#  #dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
+#  dataloc="/lfs/h3/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+#elif [[ $retro == "winter" ]]; then
+#  #dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata" #old location
+#  #dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
+#  dataloc="/lfs/h3/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+#elif [[ $retro == "spring" ]]; then
+#  #dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
+#  dataloc="/lfs/h3/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+#fi
 
 
 filenames0=""

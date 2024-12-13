@@ -38,10 +38,9 @@ while getopts ":nuseh" opt; do
   esac
 done
 
-stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status"
+stat="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata-scripts/status/"
 
-#spdy=20230630; epdy=20230630; retro="spring"  # spring 2023 retro period
-spdy=20240529; epdy=20240531; retro="spring"  # spring 2023 retro period
+spdy=20240510; epdy=20240510; retro="spring"  # spring 2024 retro period
 
 check_gvf="YES"               # check gvf; gvf.ksh
 check_highres_sst="YES"       # check highres_sst; sst.ksh
@@ -68,11 +67,16 @@ check_satFED="YES"            # check sat (fed-lightning);
 #check_satFED="NO"            # check sat (fed-lightning);
 
 if [[ $retro == "summer" ]]; then
-  dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+  #dataloc="/lfs/h2/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+  dataloc="/lfs/h3/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "winter" ]]; then
-  dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+  #dataloc="/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs-stagedata"
+  #dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
+  dataloc="/lfs/h3/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
 elif [[ $retro == "spring" ]]; then
-  dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
+  #dataloc="/lfs/h3/emc/rrfstemp/donald.e.lippi/rrfs-stagedata"
+  dataloc="/lfs/h3/emc/lam/noscrub/donald.e.lippi/rrfs-stagedata"
+  dataloc="/lfs/h3/emc/lam/noscrub/emc.lam/rrfs-stagedata"
 fi
 
 mkdir -p $stat
@@ -88,6 +92,7 @@ data:
 
   echo `doy $pdy` | tee -a ${stat}/status.$pdy
   doy=`doy $pdy | cut -f 4 -d " "`
+  #doy=`date -d $pdy +%j`
   doy=$(printf "%03d" $doy)
   yy=`echo $pdy | cut -c 3-4`
   yyyy=`echo $pdy | cut -c 1-4`
@@ -98,7 +103,8 @@ data:
     mkdir -p $dir
     num=`find $dir -name *nc | wc`
     num=`echo $num | cut -f 1 -d " "`
-    (( percent = 100 * $num / 560 ))  # 80 ensemble members x 4 synoptic times = 320/day
+    #(( percent = 100 * $num / 560 ))  # 80 ensemble members x 4 synoptic times = 320/day
+    (( percent = 100 * $num / 240 ))  # 80 ensemble members x 4 synoptic times = 320/day
     echo "enkf/atm/      $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
                                   #atm +30 ensemble members x 4 synoptic times = 440/day
                                   #sfc +30 ensemble members x 4 synoptic times = 560/day
@@ -170,13 +176,12 @@ data:
     dir="RAVE_RAW/"
     mkdir -p $dir
     num=`find $dir -name "RAVE*${pdy}*" | wc`
-    #num=`find $dir -name "Hourly_Emissions*${pdy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
     (( percent = 100 * $num / 24 ))  # 1 files for each day
     echo "RAVE/          $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
-  # check sat FED lightning 
+  # check sat FED lightning
   if [[ $check_satFED == "YES" ]]; then
     dir="sat/nesdis/goes-east/glm/full-disk/"
     mkdir -p $dir
@@ -192,7 +197,8 @@ data:
     mkdir -p $dir
     num=`find $dir -name "${yy}${doy}*" | wc`
     num=`echo $num | cut -f 1 -d " "`
-    (( percent = 100 * $num / 320 ))  # 320 files for each day
+    #(( percent = 100 * $num / 320 ))  # 320 files for each day
+    (( percent = 100 * $num / 400 ))  # 400 files for each day (out to 99 hrs)
     echo "gfs/           $pdy is completed: ${percent}% ($num)" | tee -a ${stat}/status.$pdy
   fi
 
@@ -211,7 +217,8 @@ data:
   fi
 
 
-  (( pdy = pdy + 1 ))
+  #(( pdy = pdy + 1 ))
+  pdy=`ndate 24 ${pdy}00 | cut -c 1-8`
   echo ""
   if [[ $pause == "YES" ]]; then
     read -p "Continue to next day? (n)ext" ans
